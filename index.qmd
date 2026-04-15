@@ -1,0 +1,13 @@
+---
+title: "Corrine Chen"
+image: "files/profile_pic.jpg"
+about:
+  template: jolla
+  links:
+    - icon: envelope
+      href: mailto:coc015@ucsd.edu
+    - icon: linkedin
+      href: https://www.linkedin.com/in/wen-hua-corrine-chen-412527376
+---
+
+Welcome to my website!

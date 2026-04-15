@@ -1,0 +1,87 @@
+/* overall page */
+body {
+  background-color: #fcfbf7;
+  color: #2f2f2f;
+}
+
+/* navbar */
+.navbar {
+  background-color: #0f766e !important;
+}
+
+.navbar, .navbar a, .navbar-brand {
+  color: white !important;
+}
+
+.navbar a:hover,
+.navbar-brand:hover {
+  color: #d1fae5 !important;
+}
+
+/* page title */
+h1 {
+  color: #0f766e;
+  font-weight: 700;
+}
+
+h2 {
+  color: #1d4ed8;
+  font-weight: 700;
+  margin-top: 1.5rem;
+}
+
+/* dates */
+strong {
+  color: #7c3aed;
+}
+
+/* section spacing */
+hr {
+  border: none;
+  border-top: 2px solid #dbeafe;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* tag pills */
+.project-tag {
+  display: inline-block;
+  padding: 0.35rem 0.8rem;
+  margin-right: 0.5rem;
+  margin-top: 0.5rem;
+  border: 1px solid #0f766e;
+  border-radius: 999px;
+  color: #0f766e;
+  background-color: #ecfdf5;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+/* experience blocks */
+.level2 {
+  background-color: #ffffff;
+  border-left: 6px solid #14b8a6;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* bullet points */
+ul li {
+  margin-bottom: 0.45rem;
+}
+
+/* right-side table of contents */
+#TOC,
+.toc-active {
+  font-size: 0.95rem;
+}
+
+#TOC a {
+  color: #2563eb;
+}
+
+#TOC a:hover {
+  color: #7c3aed;
+}

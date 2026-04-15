@@ -1,0 +1,44 @@
+---
+title: "Experience"
+---
+
+## Digital Technology Management Intern, Deloitte
+**Jul 2024 – Aug 2024**
+
+- Analyzed and observed data governance challenges, adopted strategies, and subsequent benefits of postal companies in the United States, Japan, Australia, and France; compiled information into a PowerPoint presentation for reference by the domestic postal industry.
+- Consulted with bank customers to learn about their work problems, introduced our data governance platform, compiled workflow charts, and added platform functions based on the needs of 8 positions, including credit risk analyst, sales representative, and data manager.
+- Collected and studied 40 smart city case studies from domestic and international sources, analyzed their operational models, and presented the findings as reference material for clients to help plan smart city exhibitions.
+
+[Deloitte]{.project-tag}
+[Data Governance]{.project-tag}
+[Smart City]{.project-tag}
+[Consulting]{.project-tag}
+
+---
+
+## Risk Control Services Intern, PricewaterhouseCoopers
+**Jan 2024 – Feb 2024**
+
+- Cleaned and consolidated data from over 10,000 entries in SAP systems, including BKPF, BSEG, SKAT, trial balance tables, and customer and employee data tables, using Excel and Access.
+- Wrote scripts with ACL Analytics to run integrity tests on dozens of companies to confirm that all subpoena information was consistent with the trial balance.
+- Gathered and analyzed specific data based on several risk points identified by the audit department in client companies.
+- Reviewed and analyzed anomalous data, and communicated with the audit department to assess the appropriateness of the designed risk points.
+
+[PwC]{.project-tag}
+[Risk Control]{.project-tag}
+[SAP]{.project-tag}
+[ACL Analytics]{.project-tag}
+
+---
+
+## Audit Intern, KPMG
+**Jan 2023 – Feb 2023**
+
+- Completed working papers, tax sampling, and confirmation letters with Excel.
+- Collaborated with the audit team to discuss risk areas and analyze account issues, enhancing the team’s ability to identify risks and gather audit evidence.
+- Served as liaison to obtain necessary audit materials from clients and resolve concerns.
+
+[KPMG]{.project-tag}
+[Audit]{.project-tag}
+[Excel]{.project-tag}
+[Risk Analysis]{.project-tag}
