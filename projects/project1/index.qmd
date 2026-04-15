@@ -48,9 +48,16 @@ That is, the difference between the sample means (registration rates) of the two
 
 ## Simulating Data
 
-To gain a more intuitive understanding of how A/B testing works, we can use simulated data to observe behavioral differences between the two groups of users.
+In real-world applications, we do not know the true values of $\pi_A$ and $\pi_B$. Instead, we only observe sample data and must estimate these quantities. However, for the purpose of this exercise, we will set the true values ourselves so that we can better understand how our estimator behaves when the truth is known.
 
-In this example, we assume that users who see CTA A are slightly more likely to register than those who see CTA B.
+Suppose that $\pi_A = 0.22$ and $\pi_B = 0.18$, so the true difference is:
+
+$$
+\theta = 0.04
+$$
+
+We now simulate 1,000 observations from each group.
+
 ```{python}
 import numpy as np
 
@@ -58,8 +65,8 @@ np.random.seed(123)
 
 n = 1000
 
-pi_A = 0.12
-pi_B = 0.10
+pi_A = 0.22
+pi_B = 0.18
 
 A = np.random.binomial(1, pi_A, n)
 B = np.random.binomial(1, pi_B, n)
@@ -68,29 +75,37 @@ print("Mean of A:", np.mean(A))
 print("Mean of B:", np.mean(B))
 print("Difference:", np.mean(A) - np.mean(B))
 ```
-This code simulates 1,000 visitors for each group and calculates the sample conversion rates and the difference between the two groups. Although we set the true values to 0.12 and 0.10, the sample rates obtained from a single simulation typically do not exactly match the true values. This is the source of sampling variance and a core issue that statistical inference must address.
+
+This simulation generates 1,000 observations for each group and computes the sample proportions. Because of sampling variability, the observed difference will typically not be exactly equal to the true value of $\theta = 0.04$, which highlights the role of randomness in statistical estimation.
 
 
 ## The Law of Large Numbers
 
-The results of a single simulation may be subject to random variation, so we repeat the experiment multiple times to observe the distribution of the estimates.
+The Law of Large Numbers states that as the sample size increases, the sample mean converges to the true population mean. In our context, this means that our estimator $\hat{\theta} = \bar{X}_A - \bar{X}_B$ should get closer to the true difference $\theta$ as we observe more data.
+
+To illustrate this, we compute the difference between each pair of observations and then calculate the cumulative average of these differences.
+
 ```{python}
-diffs = []
-
-for _ in range(1000):
-    A = np.random.binomial(1, pi_A, n)
-    B = np.random.binomial(1, pi_B, n)
-    diffs.append(np.mean(A) - np.mean(B))
-
+import numpy as np
 import matplotlib.pyplot as plt
 
-plt.hist(diffs, bins=30)
-plt.title("Distribution of Estimated Differences")
-plt.xlabel("Difference (A - B)")
-plt.ylabel("Frequency")
+# element-wise differences
+diffs = A - B
+
+# cumulative average
+running_mean = np.cumsum(diffs) / np.arange(1, n+1)
+
+plt.figure(figsize=(8,5))
+plt.plot(running_mean, label="Running Mean")
+plt.axhline(y=0.04, color='red', linestyle='--', label="True Value (θ = 0.04)")
+plt.xlabel("Number of Observations")
+plt.ylabel("Cumulative Average")
+plt.title("Law of Large Numbers: Convergence of the Sample Mean")
+plt.legend()
 plt.show()
 ```
-As can be seen from the plot, as the number of simulations increases, the estimated values gradually converge to the true difference, demonstrating the Law of Large Numbers.
+
+From the plot, we can see that the running average is highly variable when the number of observations is small. However, as more data are included, the estimate stabilizes and converges toward the true value of $\theta = 0.04$. This demonstrates the Law of Large Numbers in action and explains why larger sample sizes lead to more reliable estimates.
 
 ## Bootstrap Standard Errors
 
@@ -145,7 +160,6 @@ ci_lower = theta_hat - 1.96 * boot_se
 ci_upper = theta_hat + 1.96 * boot_se
 
 print("95% confidence interval:", (ci_lower, ci_upper))
-print("95% confidence interval:", (ci_lower, ci_upper))
 ```
 The correct interpretation of this interval is not that “$\theta$ has a 95% probability of falling within this interval,” because in frequentist statistics, $\theta$ is a fixed constant, not a random variable. A more precise statement is: if we repeatedly sample using the same method and construct confidence intervals, in the long run, approximately 95% of such intervals will contain the true $\theta$. In practice, this interval allows us not only to know the estimate of the effect but also to understand the reasonable range of uncertainty.
 
@@ -162,9 +176,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 np.random.seed(123)
-
-pi_A = 0.12
-pi_B = 0.10
+pi_A = 0.22
+pi_B = 0.18
 
 sample_sizes = [25, 50, 100, 500]
 
@@ -297,7 +310,6 @@ X = sm.add_constant(D)
 # fit regression
 model = sm.OLS(Y, X).fit()
 
-print(model.summary())
 ```
 
 To extract the key quantities:

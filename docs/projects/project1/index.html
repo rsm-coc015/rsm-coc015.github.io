@@ -266,17 +266,21 @@ window.Quarto = {
 </section>
 <section id="simulating-data" class="level2">
 <h2 class="anchored" data-anchor-id="simulating-data">Simulating Data</h2>
-<p>To gain a more intuitive understanding of how A/B testing works, we can use simulated data to observe behavioral differences between the two groups of users.</p>
-<p>In this example, we assume that users who see CTA A are slightly more likely to register than those who see CTA B.</p>
-<div id="10eeb5f9" class="cell" data-execution_count="1">
+<p>In real-world applications, we do not know the true values of <span class="math inline">\(\pi_A\)</span> and <span class="math inline">\(\pi_B\)</span>. Instead, we only observe sample data and must estimate these quantities. However, for the purpose of this exercise, we will set the true values ourselves so that we can better understand how our estimator behaves when the truth is known.</p>
+<p>Suppose that <span class="math inline">\(\pi_A = 0.22\)</span> and <span class="math inline">\(\pi_B = 0.18\)</span>, so the true difference is:</p>
+<p><span class="math display">\[
+\theta = 0.04
+\]</span></p>
+<p>We now simulate 1,000 observations from each group.</p>
+<div id="0aab82a6" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">123</span>)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">1000</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>pi_A <span class="op">=</span> <span class="fl">0.12</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>pi_B <span class="op">=</span> <span class="fl">0.10</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>pi_A <span class="op">=</span> <span class="fl">0.22</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>pi_B <span class="op">=</span> <span class="fl">0.18</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> np.random.binomial(<span class="dv">1</span>, pi_A, n)</span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>B <span class="op">=</span> np.random.binomial(<span class="dv">1</span>, pi_B, n)</span>
@@ -285,47 +289,51 @@ window.Quarto = {
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Mean of B:"</span>, np.mean(B))</span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Difference:"</span>, np.mean(A) <span class="op">-</span> np.mean(B))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Mean of A: 0.121
-Mean of B: 0.106
-Difference: 0.015</code></pre>
+<pre><code>Mean of A: 0.207
+Mean of B: 0.201
+Difference: 0.005999999999999978</code></pre>
 </div>
 </div>
-<p>This code simulates 1,000 visitors for each group and calculates the sample conversion rates and the difference between the two groups. Although we set the true values to 0.12 and 0.10, the sample rates obtained from a single simulation typically do not exactly match the true values. This is the source of sampling variance and a core issue that statistical inference must address.</p>
+<p>This simulation generates 1,000 observations for each group and computes the sample proportions. Because of sampling variability, the observed difference will typically not be exactly equal to the true value of <span class="math inline">\(\theta = 0.04\)</span>, which highlights the role of randomness in statistical estimation.</p>
 </section>
 <section id="the-law-of-large-numbers" class="level2">
 <h2 class="anchored" data-anchor-id="the-law-of-large-numbers">The Law of Large Numbers</h2>
-<p>The results of a single simulation may be subject to random variation, so we repeat the experiment multiple times to observe the distribution of the estimates.</p>
-<div id="2bfc9040" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>diffs <span class="op">=</span> []</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1000</span>):</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    A <span class="op">=</span> np.random.binomial(<span class="dv">1</span>, pi_A, n)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    B <span class="op">=</span> np.random.binomial(<span class="dv">1</span>, pi_B, n)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    diffs.append(np.mean(A) <span class="op">-</span> np.mean(B))</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<p>The Law of Large Numbers states that as the sample size increases, the sample mean converges to the true population mean. In our context, this means that our estimator <span class="math inline">\(\hat{\theta} = \bar{X}_A - \bar{X}_B\)</span> should get closer to the true difference <span class="math inline">\(\theta\)</span> as we observe more data.</p>
+<p>To illustrate this, we compute the difference between each pair of observations and then calculate the cumulative average of these differences.</p>
+<div id="814e8c50" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># element-wise differences</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>diffs <span class="op">=</span> A <span class="op">-</span> B</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># cumulative average</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>running_mean <span class="op">=</span> np.cumsum(diffs) <span class="op">/</span> np.arange(<span class="dv">1</span>, n<span class="op">+</span><span class="dv">1</span>)</span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>plt.hist(diffs, bins<span class="op">=</span><span class="dv">30</span>)</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Distribution of Estimated Differences"</span>)</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Difference (A - B)"</span>)</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Frequency"</span>)</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">5</span>))</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>plt.plot(running_mean, label<span class="op">=</span><span class="st">"Running Mean"</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>plt.axhline(y<span class="op">=</span><span class="fl">0.04</span>, color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, label<span class="op">=</span><span class="st">"True Value (θ = 0.04)"</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Number of Observations"</span>)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Cumulative Average"</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Law of Large Numbers: Convergence of the Sample Mean"</span>)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/cell-3-output-1.png" width="585" height="449" class="figure-img"></p>
+<p><img src="index_files/figure-html/cell-3-output-1.png" width="683" height="449" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>As can be seen from the plot, as the number of simulations increases, the estimated values gradually converge to the true difference, demonstrating the Law of Large Numbers.</p>
+<p>From the plot, we can see that the running average is highly variable when the number of observations is small. However, as more data are included, the estimate stabilizes and converges toward the true value of <span class="math inline">\(\theta = 0.04\)</span>. This demonstrates the Law of Large Numbers in action and explains why larger sample sizes lead to more reliable estimates.</p>
 </section>
 <section id="bootstrap-standard-errors" class="level2">
 <h2 class="anchored" data-anchor-id="bootstrap-standard-errors">Bootstrap Standard Errors</h2>
 <p>Since the estimate is expected to converge to the true value over the long run, the next natural question is: How accurate is it? Simply reporting a single point estimate <span class="math inline">\(\hat{\theta}\)</span> is insufficient, as it does not tell the reader how much uncertainty is associated with this estimate. To quantify this uncertainty, we need to estimate the standard error.</p>
 <p>Bootstrapping is a very intuitive resampling method. It does not rely on complex theoretical derivations but instead repeatedly samples with replacement directly from the available sample data, simulating “how the estimator would vary if we performed many similar samplings.” Each bootstrap resample produces a new <span class="math inline">\(\hat{\theta}^*\)</span>, and the standard deviation of these resampled estimates can be taken as the bootstrap standard error.</p>
 <p>Below, we perform 1,000 with-replacement resamples from the 1,000 observations in each of Groups A and B, and repeat this process 1,000 times.</p>
-<div id="8e0c191e" class="cell" data-execution_count="3">
+<div id="68076c94" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>boot_diffs <span class="op">=</span> []</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1000</span>):</span>
@@ -338,14 +346,14 @@ Difference: 0.015</code></pre>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Bootstrap standard error:"</span>, boot_se)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Bootstrap standard error: 0.014083562998998043</code></pre>
+<pre><code>Bootstrap standard error: 0.017925626323202184</code></pre>
 </div>
 </div>
 <p>Next, we use the theoretical formula to calculate the analytical standard error. For two independent Bernoulli samples, the standard error of the sample mean can be expressed as: <span class="math display">\[
 SE(\hat\theta) = \sqrt{\frac{\hat\pi_A(1 - \hat\pi_A)}{n} + \frac{\hat\pi_B(1 - \hat\pi_B)}{n}}
 \]</span></p>
 <p>Here, <span class="math inline">\(\hat{\pi}_A\)</span> and <span class="math inline">\(\hat{\pi}_B\)</span> are the sample proportions.</p>
-<div id="f9aec841" class="cell" data-execution_count="4">
+<div id="a0d566df" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>pi_A_hat <span class="op">=</span> np.mean(A)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>pi_B_hat <span class="op">=</span> np.mean(B)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -357,25 +365,23 @@ SE(\hat\theta) = \sqrt{\frac{\hat\pi_A(1 - \hat\pi_A)}{n} + \frac{\hat\pi_B(1 - 
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Analytical standard error:"</span>, analytical_se)</span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Difference between SEs:"</span>, <span class="bu">abs</span>(boot_se <span class="op">-</span> analytical_se))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Analytical standard error: 0.013708829271677433
-Difference between SEs: 0.00037473372732061035</code></pre>
+<pre><code>Analytical standard error: 0.018020821290940098
+Difference between SEs: 9.519496773791394e-05</code></pre>
 </div>
 </div>
 <p>If the bootstrap standard error and the analytical standard error are close, it indicates that the bootstrap method has successfully captured the uncertainty in the estimate. In this example, the two are typically very close, which suggests that the bootstrap method is not only conceptually appealing but also provides reasonably sound results in practice.</p>
 <p>Finally, we use the bootstrap standard error to construct a 95% confidence interval: <span class="math display">\[
 \hat{\theta} \pm 1.96 \times SE_{bootstrap}
 \]</span></p>
-<div id="7d3ee484" class="cell" data-execution_count="5">
+<div id="76ddec40" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>theta_hat <span class="op">=</span> np.mean(A) <span class="op">-</span> np.mean(B)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>ci_lower <span class="op">=</span> theta_hat <span class="op">-</span> <span class="fl">1.96</span> <span class="op">*</span> boot_se</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>ci_upper <span class="op">=</span> theta_hat <span class="op">+</span> <span class="fl">1.96</span> <span class="op">*</span> boot_se</span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"95</span><span class="sc">% c</span><span class="st">onfidence interval:"</span>, (ci_lower, ci_upper))</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"95</span><span class="sc">% c</span><span class="st">onfidence interval:"</span>, (ci_lower, ci_upper))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"95</span><span class="sc">% c</span><span class="st">onfidence interval:"</span>, (ci_lower, ci_upper))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>95% confidence interval: (np.float64(-0.021603783478036157), np.float64(0.033603783478036164))
-95% confidence interval: (np.float64(-0.021603783478036157), np.float64(0.033603783478036164))</code></pre>
+<pre><code>95% confidence interval: (np.float64(-0.0291342275934763), np.float64(0.04113422759347626))</code></pre>
 </div>
 </div>
 <p>The correct interpretation of this interval is not that “<span class="math inline">\(\theta\)</span> has a 95% probability of falling within this interval,” because in frequentist statistics, <span class="math inline">\(\theta\)</span> is a fixed constant, not a random variable. A more precise statement is: if we repeatedly sample using the same method and construct confidence intervals, in the long run, approximately 95% of such intervals will contain the true <span class="math inline">\(\theta\)</span>. In practice, this interval allows us not only to know the estimate of the effect but also to understand the reasonable range of uncertainty.</p>
@@ -384,36 +390,35 @@ Difference between SEs: 0.00037473372732061035</code></pre>
 <h2 class="anchored" data-anchor-id="the-central-limit-theorem">The Central Limit Theorem</h2>
 <p>In addition to bootstrapping, another important tool for understanding sampling distributions is the Central Limit Theorem (CLT). The CLT tells us that when the sample size is sufficiently large, even if the original data itself is not normally distributed, many statistics based on the mean will still approximately follow a normal distribution.</p>
 <p>In this A/B test, each visitor’s outcome is either 0 or 1, which is clearly not normally distributed data; however, <span class="math inline">\(\bar{X}_A - \bar{X}_B\)</span>, as the difference between the two sample means, will still have a sampling distribution that approximates a bell curve when the sample size is sufficiently large. This is why we can use normal approximation to construct confidence intervals and perform hypothesis tests.</p>
-<div id="fa892647" class="cell" data-execution_count="6">
+<div id="f30da47e" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">123</span>)</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>pi_A <span class="op">=</span> <span class="fl">0.12</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>pi_B <span class="op">=</span> <span class="fl">0.10</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>sample_sizes <span class="op">=</span> [<span class="dv">25</span>, <span class="dv">50</span>, <span class="dv">100</span>, <span class="dv">500</span>]</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">8</span>))</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, n <span class="kw">in</span> <span class="bu">enumerate</span>(sample_sizes):</span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    diffs <span class="op">=</span> []</span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1000</span>):</span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>        A <span class="op">=</span> np.random.binomial(<span class="dv">1</span>, pi_A, n)</span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>        B <span class="op">=</span> np.random.binomial(<span class="dv">1</span>, pi_B, n)</span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>        diffs.append(np.mean(A) <span class="op">-</span> np.mean(B))</span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> axes[i <span class="op">//</span> <span class="dv">2</span>, i <span class="op">%</span> <span class="dv">2</span>]</span>
-<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    ax.hist(diffs, bins<span class="op">=</span><span class="dv">30</span>, edgecolor<span class="op">=</span><span class="st">'black'</span>)</span>
-<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="ss">f"n = </span><span class="sc">{</span>n<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">"Difference (A - B)"</span>)</span>
-<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">"Frequency"</span>)</span>
-<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>    ax.set_xlim(<span class="op">-</span><span class="fl">0.2</span>, <span class="fl">0.2</span>)</span>
-<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>pi_A <span class="op">=</span> <span class="fl">0.22</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>pi_B <span class="op">=</span> <span class="fl">0.18</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>sample_sizes <span class="op">=</span> [<span class="dv">25</span>, <span class="dv">50</span>, <span class="dv">100</span>, <span class="dv">500</span>]</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">8</span>))</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, n <span class="kw">in</span> <span class="bu">enumerate</span>(sample_sizes):</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    diffs <span class="op">=</span> []</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1000</span>):</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>        A <span class="op">=</span> np.random.binomial(<span class="dv">1</span>, pi_A, n)</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>        B <span class="op">=</span> np.random.binomial(<span class="dv">1</span>, pi_B, n)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>        diffs.append(np.mean(A) <span class="op">-</span> np.mean(B))</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> axes[i <span class="op">//</span> <span class="dv">2</span>, i <span class="op">%</span> <span class="dv">2</span>]</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    ax.hist(diffs, bins<span class="op">=</span><span class="dv">30</span>, edgecolor<span class="op">=</span><span class="st">'black'</span>)</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="ss">f"n = </span><span class="sc">{</span>n<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">"Difference (A - B)"</span>)</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">"Frequency"</span>)</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>    ax.set_xlim(<span class="op">-</span><span class="fl">0.2</span>, <span class="fl">0.2</span>)</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -448,7 +453,7 @@ Z \sim N(0,1)
 <p>This is crucial because once we know the distribution of the statistic under the null hypothesis, we can calculate the p-value to determine whether the observed result is unusual.</p>
 <p>It is worth noting that this method is often referred to as a “t-test,” but in this case, it is actually closer to a z-test. The traditional t-test is based on the assumption that the data comes from a normal distribution and the variance is unknown, in which case the test statistic follows a t-distribution. However, here, our data comes from a Bernoulli distribution, not a normal distribution; we rely on the Central Limit Theorem to obtain an approximation of a normal distribution. Therefore, the test here is actually a z-test based on a normal approximation. Since the sample size is very large, the t-distribution and the standard normal distribution are virtually indistinguishable, so this has little practical impact; however, understanding this distinction remains important.</p>
 <p>Next, we will use simulated data to calculate the test statistic and p-value:</p>
-<div id="d011e583" class="cell" data-execution_count="7">
+<div id="8ece7621" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -473,8 +478,8 @@ Z \sim N(0,1)
 <span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Z-statistic:"</span>, z_stat)</span>
 <span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"P-value:"</span>, p_value)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Z-statistic: 2.7960739846822262
-P-value: 0.00517275573902598</code></pre>
+<pre><code>Z-statistic: 2.762111780411504
+P-value: 0.0057428813175932625</code></pre>
 </div>
 </div>
 <p>As can be seen from the results, the p-value is very small, indicating that observing such a difference under the null hypothesis (that there is no difference between the two groups) would be highly unusual. Therefore, we have sufficient evidence to reject the null hypothesis and conclude that there is indeed a difference in the effectiveness of the two CTAs.</p>
@@ -499,7 +504,7 @@ Y_i = \beta_0 + \beta_1 D_i + \varepsilon_i
 <li>It follows that <span class="math inline">\(\beta_1 = \pi_A - \pi_B = \theta\)</span>, so the OLS estimate <span class="math inline">\(\hat{\beta}_1\)</span> is numerically identical to the difference in sample means, <span class="math inline">\(\hat{\theta}\)</span>.</li>
 </ol>
 <p>Next, we fit this regression using the simulated data.</p>
-<div id="b694258b" class="cell" data-execution_count="8">
+<div id="d502558e" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -511,53 +516,24 @@ Y_i = \beta_0 + \beta_1 D_i + \varepsilon_i
 <span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> sm.add_constant(D)</span>
 <span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co"># fit regression</span></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> sm.OLS(Y, X).fit()</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(model.summary())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                            OLS Regression Results                            
-==============================================================================
-Dep. Variable:                      y   R-squared:                       0.008
-Model:                            OLS   Adj. R-squared:                  0.007
-Method:                 Least Squares   F-statistic:                     7.802
-Date:                Wed, 15 Apr 2026   Prob (F-statistic):            0.00532
-Time:                        15:04:08   Log-Likelihood:                -232.68
-No. Observations:                1000   AIC:                             469.4
-Df Residuals:                     998   BIC:                             479.2
-Df Model:                           1                                         
-Covariance Type:            nonrobust                                         
-==============================================================================
-                 coef    std err          t      P&gt;|t|      [0.025      0.975]
-------------------------------------------------------------------------------
-const          0.0780      0.014      5.706      0.000       0.051       0.105
-x1             0.0540      0.019      2.793      0.005       0.016       0.092
-==============================================================================
-Omnibus:                      501.761   Durbin-Watson:                   2.081
-Prob(Omnibus):                  0.000   Jarque-Bera (JB):             1950.088
-Skew:                           2.547   Prob(JB):                         0.00
-Kurtosis:                       7.567   Cond. No.                         2.62
-==============================================================================
-
-Notes:
-[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.</code></pre>
-</div>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> sm.OLS(Y, X).fit()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>To extract the key quantities:</p>
-<div id="e3cdcdc9" class="cell" data-execution_count="9">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>beta_1 <span class="op">=</span> model.params[<span class="dv">1</span>]</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>se_beta_1 <span class="op">=</span> model.bse[<span class="dv">1</span>]</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>t_stat <span class="op">=</span> model.tvalues[<span class="dv">1</span>]</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>p_value <span class="op">=</span> model.pvalues[<span class="dv">1</span>]</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Coefficient (beta_1):"</span>, beta_1)</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Standard error:"</span>, se_beta_1)</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"t-statistic:"</span>, t_stat)</span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"p-value:"</span>, p_value)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="54f63658" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>beta_1 <span class="op">=</span> model.params[<span class="dv">1</span>]</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>se_beta_1 <span class="op">=</span> model.bse[<span class="dv">1</span>]</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>t_stat <span class="op">=</span> model.tvalues[<span class="dv">1</span>]</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>p_value <span class="op">=</span> model.pvalues[<span class="dv">1</span>]</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Coefficient (beta_1):"</span>, beta_1)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Standard error:"</span>, se_beta_1)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"t-statistic:"</span>, t_stat)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"p-value:"</span>, p_value)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Coefficient (beta_1): 0.05400000000000009
-Standard error: 0.019332135498331602
-t-statistic: 2.793276511260765
-p-value: 0.005317513716905575</code></pre>
+<pre><code>Coefficient (beta_1): 0.07000000000000023
+Standard error: 0.02536830901349969
+t-statistic: 2.7593482861924254
+p-value: 0.005897661552289638</code></pre>
 </div>
 </div>
 <p>The estimated coefficient <span class="math inline">\(\hat{\beta}_1\)</span> represents the difference in mean outcomes between the two groups, and should match the value of <span class="math inline">\(\hat{\theta}\)</span> computed earlier. Similarly, the t-statistic and p-value will be very close to those obtained from the two-sample test, with only minor differences due to how the standard error is calculated (pooled vs.&nbsp;separate variance assumptions).</p>
@@ -568,64 +544,64 @@ p-value: 0.005317513716905575</code></pre>
 <p>In practice, it is often tempting to monitor results as data are collected and stop an experiment early if a statistically significant result appears. For example, instead of waiting until all 1,000 observations per group are collected, one might run a hypothesis test after every 100 observations and stop as soon as a p-value falls below 0.05.</p>
 <p>Under classical frequentist statistics, this approach is problematic. A single hypothesis test conducted at the <span class="math inline">\(\alpha = 0.05\)</span> level has a 5% probability of a Type I error — that is, incorrectly rejecting the null hypothesis when it is actually true. However, if we repeatedly test the data as it accumulates, each “peek” creates another opportunity to obtain a false positive. As a result, the overall probability of making at least one false rejection becomes much larger than 5%.</p>
 <p>To demonstrate this, we simulate a scenario in which the null hypothesis is true. Specifically, we assume that both CTAs have the same sign-up probability, <span class="math inline">\(\pi_A = \pi_B = 0.20\)</span>, so there is no real difference between the groups.</p>
-<div id="a89ef193" class="cell" data-execution_count="10">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">123</span>)</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co"># parameters under null</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>pi_A <span class="op">=</span> <span class="fl">0.20</span></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>pi_B <span class="op">=</span> <span class="fl">0.20</span></span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>n_total <span class="op">=</span> <span class="dv">1000</span></span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>step <span class="op">=</span> <span class="dv">100</span></span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>n_experiments <span class="op">=</span> <span class="dv">10000</span></span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>false_positive_count <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(n_experiments):</span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># simulate full data</span></span>
-<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>    A_full <span class="op">=</span> np.random.binomial(<span class="dv">1</span>, pi_A, n_total)</span>
-<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>    B_full <span class="op">=</span> np.random.binomial(<span class="dv">1</span>, pi_B, n_total)</span>
-<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>    found_significant <span class="op">=</span> <span class="va">False</span></span>
-<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># peeking at increasing sample sizes</span></span>
-<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(step, n_total <span class="op">+</span> <span class="dv">1</span>, step):</span>
-<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>        A <span class="op">=</span> A_full[:n]</span>
-<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>        B <span class="op">=</span> B_full[:n]</span>
-<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>        <span class="co"># estimate</span></span>
-<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>        theta_hat <span class="op">=</span> np.mean(A) <span class="op">-</span> np.mean(B)</span>
-<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>        <span class="co"># standard error</span></span>
-<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>        pi_A_hat <span class="op">=</span> np.mean(A)</span>
-<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>        pi_B_hat <span class="op">=</span> np.mean(B)</span>
-<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a>        se <span class="op">=</span> np.sqrt(</span>
-<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>            pi_A_hat <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> pi_A_hat) <span class="op">/</span> n <span class="op">+</span></span>
-<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>            pi_B_hat <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> pi_B_hat) <span class="op">/</span> n</span>
-<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a>        <span class="co"># test statistic</span></span>
-<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a>        z_stat <span class="op">=</span> theta_hat <span class="op">/</span> se</span>
-<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a>        <span class="co"># p-value</span></span>
-<span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a>        p_value <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> stats.norm.cdf(<span class="bu">abs</span>(z_stat)))</span>
-<span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> p_value <span class="op">&lt;</span> <span class="fl">0.05</span>:</span>
-<span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a>            found_significant <span class="op">=</span> <span class="va">True</span></span>
-<span id="cb17-50"><a href="#cb17-50" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span></span>
-<span id="cb17-51"><a href="#cb17-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-52"><a href="#cb17-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> found_significant:</span>
-<span id="cb17-53"><a href="#cb17-53" aria-hidden="true" tabindex="-1"></a>        false_positive_count <span class="op">+=</span> <span class="dv">1</span></span>
-<span id="cb17-54"><a href="#cb17-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-55"><a href="#cb17-55" aria-hidden="true" tabindex="-1"></a>false_positive_rate <span class="op">=</span> false_positive_count <span class="op">/</span> n_experiments</span>
-<span id="cb17-56"><a href="#cb17-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-57"><a href="#cb17-57" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"False positive rate with peeking:"</span>, false_positive_rate)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="923c4120" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">123</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># parameters under null</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>pi_A <span class="op">=</span> <span class="fl">0.20</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>pi_B <span class="op">=</span> <span class="fl">0.20</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>n_total <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>step <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>n_experiments <span class="op">=</span> <span class="dv">10000</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>false_positive_count <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(n_experiments):</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># simulate full data</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>    A_full <span class="op">=</span> np.random.binomial(<span class="dv">1</span>, pi_A, n_total)</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>    B_full <span class="op">=</span> np.random.binomial(<span class="dv">1</span>, pi_B, n_total)</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>    found_significant <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># peeking at increasing sample sizes</span></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(step, n_total <span class="op">+</span> <span class="dv">1</span>, step):</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>        A <span class="op">=</span> A_full[:n]</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>        B <span class="op">=</span> B_full[:n]</span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>        <span class="co"># estimate</span></span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>        theta_hat <span class="op">=</span> np.mean(A) <span class="op">-</span> np.mean(B)</span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>        <span class="co"># standard error</span></span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>        pi_A_hat <span class="op">=</span> np.mean(A)</span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>        pi_B_hat <span class="op">=</span> np.mean(B)</span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>        se <span class="op">=</span> np.sqrt(</span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>            pi_A_hat <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> pi_A_hat) <span class="op">/</span> n <span class="op">+</span></span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>            pi_B_hat <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> pi_B_hat) <span class="op">/</span> n</span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>        <span class="co"># test statistic</span></span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>        z_stat <span class="op">=</span> theta_hat <span class="op">/</span> se</span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>        <span class="co"># p-value</span></span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>        p_value <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> stats.norm.cdf(<span class="bu">abs</span>(z_stat)))</span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> p_value <span class="op">&lt;</span> <span class="fl">0.05</span>:</span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a>            found_significant <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span></span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> found_significant:</span>
+<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a>        false_positive_count <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a>false_positive_rate <span class="op">=</span> false_positive_count <span class="op">/</span> n_experiments</span>
+<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-57"><a href="#cb16-57" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"False positive rate with peeking:"</span>, false_positive_rate)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>False positive rate with peeking: 0.199</code></pre>
 </div>
