@@ -163,9 +163,9 @@ window.Quarto = {
   <li><a href="#table-3-diff-in-diff-estimate" id="toc-table-3-diff-in-diff-estimate" class="nav-link" data-scroll-target="#table-3-diff-in-diff-estimate">Table 3: Diff-in-Diff Estimate</a></li>
   <li><a href="#table-4-column-i-ols-regression" id="toc-table-4-column-i-ols-regression" class="nav-link" data-scroll-target="#table-4-column-i-ols-regression">Table 4, Column (i): OLS Regression</a></li>
   </ul></li>
-  <li><a href="#something-additional-visualizing-the-did-and-chain-level-heterogeneity" id="toc-something-additional-visualizing-the-did-and-chain-level-heterogeneity" class="nav-link" data-scroll-target="#something-additional-visualizing-the-did-and-chain-level-heterogeneity">Something Additional: Visualizing the DiD and Chain-Level Heterogeneity</a>
+  <li><a href="#something-additional" id="toc-something-additional" class="nav-link" data-scroll-target="#something-additional">Something Additional</a>
   <ul class="collapse">
-  <li><a href="#why-does-did-enable-causal-inference" id="toc-why-does-did-enable-causal-inference" class="nav-link" data-scroll-target="#why-does-did-enable-causal-inference">Why Does DiD Enable Causal Inference?</a></li>
+  <li><a href="#visualizing-the-did" id="toc-visualizing-the-did" class="nav-link" data-scroll-target="#visualizing-the-did">Visualizing the DiD</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -221,8 +221,8 @@ window.Quarto = {
 <section id="table-2-descriptive-statistics" class="level3">
 <h3 class="anchored" data-anchor-id="table-2-descriptive-statistics">Table 2: Descriptive Statistics</h3>
 <p>Card and Krueger surveyed fast food restaurants in New Jersey (NJ) and Pennsylvania (PA) twice — before (February 1992) and after (November 1992) NJ raised its minimum wage from $4.25 to $5.05. Table 2 summarizes key variables by state.</p>
-<div id="5aee6cec" class="cell" data-execution_count="2">
-<div class="cell-output cell-output-display" data-execution_count="9">
+<div id="923231b3" class="cell" data-execution_count="2">
+<div class="cell-output cell-output-display" data-execution_count="20">
 <div>
 
 
@@ -283,8 +283,8 @@ window.Quarto = {
 <section id="table-3-diff-in-diff-estimate" class="level3">
 <h3 class="anchored" data-anchor-id="table-3-diff-in-diff-estimate">Table 3: Diff-in-Diff Estimate</h3>
 <p>The core of the paper is comparing the <em>change</em> in employment across the two states. If NJ and PA would have followed the same trend absent the policy, any divergence is attributable to the minimum wage increase.</p>
-<div id="a6758f68" class="cell" data-execution_count="3">
-<div class="cell-output cell-output-display" data-execution_count="10">
+<div id="ae8460e0" class="cell" data-execution_count="3">
+<div class="cell-output cell-output-display" data-execution_count="21">
 <div>
 
 
@@ -328,7 +328,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<div id="01390995" class="cell" data-execution_count="4">
+<div id="5fe5cd57" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-stdout">
 <pre><code>SE of DiD: (1.34)
 t-statistic: 2.03,  p-value: 0.043</code></pre>
@@ -341,8 +341,8 @@ t-statistic: 2.03,  p-value: 0.043</code></pre>
 <p>The DiD can be expressed as a simple regression of the <em>change</em> in FTE on an NJ indicator:</p>
 <p><span class="math display">\[\Delta \text{FTE}_i = \alpha + \beta \cdot \mathbf{1}[\text{NJ}_i] + \varepsilon_i\]</span></p>
 <p>The coefficient <span class="math inline">\(\beta\)</span> is the DiD estimate; <span class="math inline">\(\alpha\)</span> is the average change in PA.</p>
-<div id="99553830" class="cell" data-execution_count="5">
-<div class="cell-output cell-output-display" data-execution_count="12">
+<div id="931e068a" class="cell" data-execution_count="5">
+<div class="cell-output cell-output-display" data-execution_count="23">
 <div>
 
 
@@ -383,9 +383,11 @@ t-statistic: 2.03,  p-value: 0.043</code></pre>
 <p>The NJ coefficient (+2.722) matches the Table 3 DiD exactly. The constant (−2.064) confirms that PA employment fell on average. Standard errors differ slightly from the paper because Card &amp; Krueger used heteroskedasticity-robust SEs.</p>
 </section>
 </section>
-<section id="something-additional-visualizing-the-did-and-chain-level-heterogeneity" class="level2">
-<h2 class="anchored" data-anchor-id="something-additional-visualizing-the-did-and-chain-level-heterogeneity">Something Additional: Visualizing the DiD and Chain-Level Heterogeneity</h2>
-<div id="3e283697" class="cell" data-execution_count="6">
+<section id="something-additional" class="level2">
+<h2 class="anchored" data-anchor-id="something-additional">Something Additional</h2>
+<section id="visualizing-the-did" class="level3">
+<h3 class="anchored" data-anchor-id="visualizing-the-did">Visualizing the DiD</h3>
+<div id="c0ad0d08" class="cell" data-execution_count="6">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -394,12 +396,7 @@ t-statistic: 2.03,  p-value: 0.043</code></pre>
 </div>
 </div>
 </div>
-<p>The left panel shows the classic DiD visualization. PA employment fell over this period; the dashed line shows what NJ <em>would have done</em> absent the policy. Instead NJ rose, yielding a causal gap of <strong>+2.72 FTE</strong>.</p>
-<p>The right panel breaks the result down by chain. Three of four chains (Burger King, Roy Rogers, Wendy’s) show positive DiD estimates — the result is not driven by any single chain. KFC is the only exception. This robustness across chains strengthens the causal interpretation.</p>
-<section id="why-does-did-enable-causal-inference" class="level3">
-<h3 class="anchored" data-anchor-id="why-does-did-enable-causal-inference">Why Does DiD Enable Causal Inference?</h3>
-<p>DiD removes two sources of bias simultaneously. First, any <strong>time-invariant differences</strong> between NJ and PA (size, location, chain mix) cancel in the within-state first difference. Second, any <strong>common time trends</strong> — recessions, seasonal patterns, industry shocks — cancel in the cross-state second difference. What remains is attributable to the minimum wage policy alone, provided the <strong>parallel trends assumption</strong> holds.</p>
-<p>Card and Krueger’s result suggested that <strong>monopsony power</strong> in low-wage labor markets can explain why modest minimum wage increases need not reduce employment — a mechanism that has since gained broad empirical support and fundamentally changed how economists think about minimum wage policy.</p>
+<p>The dashed line shows what NJ <em>would have done</em> absent the policy — the counterfactual. Instead NJ employment rose while PA fell, yielding a causal gap of <strong>+2.72 FTE</strong>. This gap is precisely the Diff-in-Diff estimate: the minimum wage increase is credited with raising fast food employment in NJ by 2.72 full-time equivalent workers relative to what would have happened otherwise.</p>
 
 
 </section>

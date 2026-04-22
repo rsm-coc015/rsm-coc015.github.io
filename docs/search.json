@@ -242,7 +242,7 @@
     "href": "projects/project2/index.html#something-additional",
     "title": "Replication of Card and Krueger (1994)",
     "section": "Something Additional",
-    "text": "Something Additional\nadd"
+    "text": "Something Additional\n\nVisualizing the DiD\n\n\n\n\n\n\n\n\n\nThe dashed line shows what NJ would have done absent the policy — the counterfactual. Instead NJ employment rose while PA fell, yielding a causal gap of +2.72 FTE. This gap is precisely the Diff-in-Diff estimate: the minimum wage increase is credited with raising fast food employment in NJ by 2.72 full-time equivalent workers relative to what would have happened otherwise."
   },
   {
     "objectID": "hw2_questions.html",
@@ -277,6 +277,6 @@
     "href": "projects/project2/index.html#something-additional-visualizing-the-did-and-chain-level-heterogeneity",
     "title": "Replication of Card and Krueger (1994)",
     "section": "Something Additional: Visualizing the DiD and Chain-Level Heterogeneity",
-    "text": "Something Additional: Visualizing the DiD and Chain-Level Heterogeneity\n\n\n\n\n\n\n\n\n\nThe left panel shows the classic DiD visualization. PA employment fell over this period; the dashed line shows what NJ would have done absent the policy. Instead NJ rose, yielding a causal gap of +2.72 FTE.\nThe right panel breaks the result down by chain. Three of four chains (Burger King, Roy Rogers, Wendy’s) show positive DiD estimates — the result is not driven by any single chain. KFC is the only exception. This robustness across chains strengthens the causal interpretation.\n\nWhy Does DiD Enable Causal Inference?\nDiD removes two sources of bias simultaneously. First, any time-invariant differences between NJ and PA (size, location, chain mix) cancel in the within-state first difference. Second, any common time trends — recessions, seasonal patterns, industry shocks — cancel in the cross-state second difference. What remains is attributable to the minimum wage policy alone, provided the parallel trends assumption holds.\nCard and Krueger’s result suggested that monopsony power in low-wage labor markets can explain why modest minimum wage increases need not reduce employment — a mechanism that has since gained broad empirical support and fundamentally changed how economists think about minimum wage policy."
+    "text": "Something Additional: Visualizing the DiD and Chain-Level Heterogeneity\n\n\n\n\n\n\n\n\n\nThe left panel shows the classic DiD visualization. PA employment fell over this period; the dashed line shows what NJ would have done absent the policy. Instead NJ rose, yielding a causal gap of +2.72 FTE.\nThe right panel breaks the result down by chain. Three of four chains (Burger King, Roy Rogers, Wendy’s) show positive DiD estimates — the result is not driven by any single chain. KFC is the only exception. This robustness across chains strengthens the causal interpretation."
   }
 ]
