@@ -220,8 +220,8 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="main-analysis">Main Analysis</h2>
 <section id="table-2-descriptive-statistics" class="level3">
 <h3 class="anchored" data-anchor-id="table-2-descriptive-statistics">Table 2: Descriptive Statistics</h3>
-<p>Card and Krueger surveyed fast food restaurants in New Jersey (NJ) and Pennsylvania (PA) twice — before (February 1992) and after (November 1992) NJ raised its minimum wage from $4.25 to $5.05. Table 2 summarizes key variables by state.</p>
-<div id="923231b3" class="cell" data-execution_count="2">
+<p>Card and Krueger surveyed fast food restaurants in New Jersey (NJ) and Pennsylvania (PA) twice, before (February 1992) and after (November 1992) NJ raised its minimum wage from $4.25 to $5.05. Table 2 summarizes key variables by state.</p>
+<div id="364e957c" class="cell" data-execution_count="2">
 <div class="cell-output cell-output-display" data-execution_count="20">
 <div>
 
@@ -278,12 +278,12 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p>Before the policy (wave 1), NJ and PA stores looked very similar — comparable wages, employment levels, and hours. After the policy (wave 2), NJ starting wages jumped to $5.08, confirming the minimum wage increase was binding. PA wages barely moved. Crucially, FTE employment in NJ <em>rose</em> slightly while PA employment fell — a first hint of the main finding.</p>
+<p>Before the policy (wave 1), NJ and PA stores looked very similar, comparable wages, employment levels, and hours. After the policy (wave 2), NJ starting wages jumped to $5.08, confirming the minimum wage increase was binding. PA wages barely moved. Crucially, FTE employment in NJ <em>rose</em> slightly while PA employment fell, a first hint of the main finding.</p>
 </section>
 <section id="table-3-diff-in-diff-estimate" class="level3">
 <h3 class="anchored" data-anchor-id="table-3-diff-in-diff-estimate">Table 3: Diff-in-Diff Estimate</h3>
 <p>The core of the paper is comparing the <em>change</em> in employment across the two states. If NJ and PA would have followed the same trend absent the policy, any divergence is attributable to the minimum wage increase.</p>
-<div id="ae8460e0" class="cell" data-execution_count="3">
+<div id="79396898" class="cell" data-execution_count="3">
 <div class="cell-output cell-output-display" data-execution_count="21">
 <div>
 
@@ -328,20 +328,20 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<div id="5fe5cd57" class="cell" data-execution_count="4">
+<div id="be60b178" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-stdout">
 <pre><code>SE of DiD: (1.34)
 t-statistic: 2.03,  p-value: 0.043</code></pre>
 </div>
 </div>
-<p>The DiD estimate is <strong>+2.72 FTE</strong> (SE = 1.34, p = 0.043). PA employment fell by about 2.0 FTE over this period, reflecting general economic conditions. NJ employment bucked that trend and rose by 0.77 FTE. The difference — <strong>2.72 full-time equivalent workers</strong> — is attributed to the minimum wage policy, and is statistically significant at the 5% level.</p>
+<p>The DiD estimate is <strong>+2.72 FTE</strong> (SE = 1.34, p = 0.043). PA employment fell by about 2.0 FTE over this period, reflecting general economic conditions. NJ employment bucked that trend and rose by 0.77 FTE. The difference, <strong>2.72 full-time equivalent workers</strong>, is attributed to the minimum wage policy, and is statistically significant at the 5% level.</p>
 </section>
 <section id="table-4-column-i-ols-regression" class="level3">
 <h3 class="anchored" data-anchor-id="table-4-column-i-ols-regression">Table 4, Column (i): OLS Regression</h3>
 <p>The DiD can be expressed as a simple regression of the <em>change</em> in FTE on an NJ indicator:</p>
 <p><span class="math display">\[\Delta \text{FTE}_i = \alpha + \beta \cdot \mathbf{1}[\text{NJ}_i] + \varepsilon_i\]</span></p>
 <p>The coefficient <span class="math inline">\(\beta\)</span> is the DiD estimate; <span class="math inline">\(\alpha\)</span> is the average change in PA.</p>
-<div id="931e068a" class="cell" data-execution_count="5">
+<div id="e0cbbace" class="cell" data-execution_count="5">
 <div class="cell-output cell-output-display" data-execution_count="23">
 <div>
 
@@ -387,16 +387,16 @@ t-statistic: 2.03,  p-value: 0.043</code></pre>
 <h2 class="anchored" data-anchor-id="something-additional">Something Additional</h2>
 <section id="visualizing-the-did" class="level3">
 <h3 class="anchored" data-anchor-id="visualizing-the-did">Visualizing the DiD</h3>
-<div id="c0ad0d08" class="cell" data-execution_count="6">
+<div id="ff02646a" class="cell" data-execution_count="6">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/cell-7-output-1.png" width="1237" height="473" class="figure-img"></p>
+<p><img src="index_files/figure-html/cell-7-output-1.png" width="661" height="469" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>The dashed line shows what NJ <em>would have done</em> absent the policy — the counterfactual. Instead NJ employment rose while PA fell, yielding a causal gap of <strong>+2.72 FTE</strong>. This gap is precisely the Diff-in-Diff estimate: the minimum wage increase is credited with raising fast food employment in NJ by 2.72 full-time equivalent workers relative to what would have happened otherwise.</p>
+<p>The dashed line shows what NJ <em>would have done</em> absent the policy, the counterfactual. Instead NJ employment rose while PA fell, yielding a causal gap of <strong>+2.72 FTE</strong>. This gap is precisely the Diff-in-Diff estimate: the minimum wage increase is credited with raising fast food employment in NJ by 2.72 full-time equivalent workers relative to what would have happened otherwise.</p>
 
 
 </section>

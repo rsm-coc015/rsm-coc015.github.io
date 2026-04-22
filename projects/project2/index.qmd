@@ -59,7 +59,7 @@ pa = df_v[df_v['nj']==0]
 
 ### Table 2: Descriptive Statistics
 
-Card and Krueger surveyed fast food restaurants in New Jersey (NJ) and Pennsylvania (PA) twice — before (February 1992) and after (November 1992) NJ raised its minimum wage from $4.25 to $5.05. Table 2 summarizes key variables by state.
+Card and Krueger surveyed fast food restaurants in New Jersey (NJ) and Pennsylvania (PA) twice, before (February 1992) and after (November 1992) NJ raised its minimum wage from $4.25 to $5.05. Table 2 summarizes key variables by state.
 
 ```{python}
 rows = []
@@ -80,7 +80,7 @@ for label, var in [
 pd.DataFrame(rows).set_index('Variable')
 ```
 
-Before the policy (wave 1), NJ and PA stores looked very similar — comparable wages, employment levels, and hours. After the policy (wave 2), NJ starting wages jumped to \$5.08, confirming the minimum wage increase was binding. PA wages barely moved. Crucially, FTE employment in NJ *rose* slightly while PA employment fell — a first hint of the main finding.
+Before the policy (wave 1), NJ and PA stores looked very similar, comparable wages, employment levels, and hours. After the policy (wave 2), NJ starting wages jumped to \$5.08, confirming the minimum wage increase was binding. PA wages barely moved. Crucially, FTE employment in NJ *rose* slightly while PA employment fell, a first hint of the main finding.
 
 ### Table 3: Diff-in-Diff Estimate
 
@@ -115,7 +115,7 @@ print(f"SE of DiD: ({se_did:.2f})")
 print(f"t-statistic: {t_did:.2f},  p-value: {p_did:.3f}")
 ```
 
-The DiD estimate is **+2.72 FTE** (SE = 1.34, p = 0.043). PA employment fell by about 2.0 FTE over this period, reflecting general economic conditions. NJ employment bucked that trend and rose by 0.77 FTE. The difference — **2.72 full-time equivalent workers** — is attributed to the minimum wage policy, and is statistically significant at the 5% level.
+The DiD estimate is **+2.72 FTE** (SE = 1.34, p = 0.043). PA employment fell by about 2.0 FTE over this period, reflecting general economic conditions. NJ employment bucked that trend and rose by 0.77 FTE. The difference, **2.72 full-time equivalent workers**, is attributed to the minimum wage policy, and is statistically significant at the 5% level.
 
 ### Table 4, Column (i): OLS Regression
 
@@ -155,9 +155,8 @@ The NJ coefficient (+2.722) matches the Table 3 DiD exactly. The constant (−2.
 ```{python}
 import matplotlib.pyplot as plt
 
-fig, axes = plt.subplots(1, 2, figsize=(13, 5))
+fig, ax = plt.subplots(figsize=(7, 5))
 
-ax = axes[0]
 counterfactual = [nj_b, nj_b + pa_ch]
 ax.plot([0,1], [nj_b,nj_a], 'b-o', lw=2.5, ms=8, label='New Jersey (NJ)')
 ax.plot([0,1], [pa_b,pa_a], 'r-o', lw=2.5, ms=8, label='Pennsylvania (PA)')
@@ -172,38 +171,11 @@ ax.set_ylabel('Average FTE Employment', fontsize=11)
 ax.set_title('Diff-in-Diff:\nNJ Minimum Wage Effect on Employment', fontsize=12)
 ax.legend(fontsize=10)
 ax.grid(True, alpha=0.3)
-
-ax2 = axes[1]
-chains = {1:'Burger King', 2:'KFC', 3:'Roy Rogers', 4:"Wendy's"}
-results = []
-for c, name in chains.items():
-    sub = df_v[df_v['chain']==c]
-    nj_c = sub[sub['nj']==1]
-    pa_c = sub[sub['nj']==0]
-    if len(pa_c) == 0: continue
-    d = (nj_c['fte2'].mean()-nj_c['fte'].mean()) - (pa_c['fte2'].mean()-pa_c['fte'].mean())
-    results.append((name, d))
-names_c = [x[0] for x in results]
-dids_c  = [x[1] for x in results]
-colors = ['steelblue' if d>0 else 'tomato' for d in dids_c]
-bars = ax2.barh(names_c, dids_c, color=colors, edgecolor='black')
-ax2.axvline(0, color='black', lw=1)
-ax2.axvline(did, color='green', lw=2, linestyle='--', label=f'Overall DiD = {did:.2f}')
-for bar, val in zip(bars, dids_c):
-    ax2.text(val+(0.3 if val>=0 else -0.3), bar.get_y()+bar.get_height()/2,
-             f'{val:.2f}', va='center', ha='left' if val>=0 else 'right', fontsize=10)
-ax2.set_xlabel('DiD Estimate (ΔFte_NJ − ΔFte_PA)', fontsize=11)
-ax2.set_title('DiD Estimate by Fast Food Chain', fontsize=12)
-ax2.legend(fontsize=10)
-ax2.grid(axis='x', alpha=0.3)
-
-plt.suptitle("Card & Krueger (1994): Minimum Wage & Fast Food Employment",
-             fontsize=13, fontweight='bold')
 plt.tight_layout()
 plt.show()
 ```
 
-The dashed line shows what NJ *would have done* absent the policy — the counterfactual.
+The dashed line shows what NJ *would have done* absent the policy, the counterfactual.
 Instead NJ employment rose while PA fell, yielding a causal gap of **+2.72 FTE**.
 This gap is precisely the Diff-in-Diff estimate: the minimum wage increase is credited
 with raising fast food employment in NJ by 2.72 full-time equivalent workers relative
