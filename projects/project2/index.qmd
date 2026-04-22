@@ -1,0 +1,214 @@
+---
+title: "Replication of Card and Krueger (1994)"
+subtitle: "Minimum Wages and Employment: A Case Study of the Fast Food Industry in New Jersey and Pennsylvania"
+author: "Corrine Chen"
+date: today
+execute:
+  echo: false
+---
+
+
+## Introduction
+Card and Krueger (1994) is one of the most influential and controversial papers in labor economics. The central question is simple but profound: **does raising the minimum wage reduce employment?**
+
+Standard economic theory predicts yes, if you raise the price of labor above the market equilibrium, firms will demand less of it. But Card and Krueger challenged this prediction using a clever natural experiment.
+
+In April 1992, New Jersey raised its minimum wage from \$4.25 to \$5.05 per hour, while neighboring Pennsylvania kept its minimum wage unchanged. The authors surveyed fast food restaurants in both states before (February 1992) and after (November 1992) the policy change, creating a natural **treatment group** (NJ) and **control group** (PA).
+
+The key insight is the **Difference-in-Differences (DiD)** design:
+$$
+\text{DiD} = \underbrace{(\bar{Y}_{NJ,\text{after}} - \bar{Y}_{NJ,\text{before}})}_{\text{NJ change}} - \underbrace{(\bar{Y}_{PA,\text{after}} - \bar{Y}_{PA,\text{before}})}_{\text{PA change}}
+$$
+
+The PA trend serves as the **counterfactual**, what would have happened to NJ employment had the minimum wage never changed. The identifying assumption is **parallel trends**: absent the policy, NJ and PA employment would have moved in parallel.
+
+The finding was shocking to many economists: **employment in NJ fast food restaurants *increased* relative to PA after the minimum wage hike**, directly contradicting the standard prediction.
+
+## Main Analysis
+
+```{python}
+import pandas as pd
+import numpy as np
+from scipy import stats
+
+col_names = [
+    'sheet','chain','co_owned','state',
+    'southj','centralj','northj','pa1','pa2','shore',
+    'ncalls','empft','emppt','nmgrs','wage_st',
+    'inctime','firstinc','bonus','pctaff','meal',
+    'open','hrsopen','psoda','pfry','pentree','nregs','nregs11',
+    'type2','status2','date2','ncalls2','empft2','emppt2',
+    'nmgrs2','wage_st2','inctime2','firstinc2','special2',
+    'meals2','open2r','hrsopen2','psoda2','pfry2','pentree2',
+    'nregs2','nregs112'
+]
+
+df = pd.read_csv('public.dat', sep=r'\s+', header=None,
+                 names=col_names, na_values=['.'])
+
+df['fte']  = df['empft']  + 0.5*df['emppt']  + df['nmgrs']
+df['fte2'] = df['empft2'] + 0.5*df['emppt2'] + df['nmgrs2']
+df['nj']   = (df['state'] == 1).astype(int)
+
+df_v = df[df['status2'] == 1].copy()
+df_v['delta_fte'] = df_v['fte2'] - df_v['fte']
+
+nj = df_v[df_v['nj']==1]
+pa = df_v[df_v['nj']==0]
+```
+
+### Table 2: Descriptive Statistics
+
+Card and Krueger surveyed fast food restaurants in New Jersey (NJ) and Pennsylvania (PA) twice — before (February 1992) and after (November 1992) NJ raised its minimum wage from $4.25 to $5.05. Table 2 summarizes key variables by state.
+
+```{python}
+rows = []
+for label, var in [
+    ('FTE employment (wave 1)', 'fte'),
+    ('FTE employment (wave 2)', 'fte2'),
+    ('Starting wage (wave 1)',  'wage_st'),
+    ('Starting wage (wave 2)',  'wage_st2'),
+    ('Hours open per day (wave 1)', 'hrsopen'),
+]:
+    nj_val = nj[var].mean()
+    pa_val = pa[var].mean()
+    rows.append({'Variable': label,
+                 'NJ': round(nj_val,2),
+                 'PA': round(pa_val,2),
+                 'Diff (NJ-PA)': round(nj_val-pa_val,2)})
+
+pd.DataFrame(rows).set_index('Variable')
+```
+
+Before the policy (wave 1), NJ and PA stores looked very similar — comparable wages, employment levels, and hours. After the policy (wave 2), NJ starting wages jumped to \$5.08, confirming the minimum wage increase was binding. PA wages barely moved. Crucially, FTE employment in NJ *rose* slightly while PA employment fell — a first hint of the main finding.
+
+### Table 3: Diff-in-Diff Estimate
+
+The core of the paper is comparing the *change* in employment across the two states. If NJ and PA would have followed the same trend absent the policy, any divergence is attributable to the minimum wage increase.
+
+```{python}
+nj_b, pa_b = nj['fte'].mean(), pa['fte'].mean()
+nj_a, pa_a = nj['fte2'].mean(), pa['fte2'].mean()
+nj_ch = nj_a - nj_b
+pa_ch = pa_a - pa_b
+did   = nj_ch - pa_ch
+
+se_did = np.sqrt(
+    (nj['delta_fte'].std()**2 / len(nj.dropna(subset=['delta_fte']))) +
+    (pa['delta_fte'].std()**2 / len(pa.dropna(subset=['delta_fte'])))
+)
+t_did = did / se_did
+p_did = 2*(1 - stats.t.cdf(abs(t_did), df=len(df_v)-2))
+
+table3 = pd.DataFrame({
+    'NJ':    [round(nj_b,2),       round(nj_a,2),       round(nj_ch,2)],
+    'PA':    [round(pa_b,2),       round(pa_a,2),       round(pa_ch,2)],
+    'NJ-PA': [round(nj_b-pa_b,2), round(nj_a-pa_a,2), round(did,2)],
+}, index=['1. FTE before (wave 1)', '2. FTE after (wave 2)', '3. Change (after - before)'])
+
+table3.index.name = 'Variable'
+table3
+```
+
+```{python}
+print(f"SE of DiD: ({se_did:.2f})")
+print(f"t-statistic: {t_did:.2f},  p-value: {p_did:.3f}")
+```
+
+The DiD estimate is **+2.72 FTE** (SE = 1.34, p = 0.043). PA employment fell by about 2.0 FTE over this period, reflecting general economic conditions. NJ employment bucked that trend and rose by 0.77 FTE. The difference — **2.72 full-time equivalent workers** — is attributed to the minimum wage policy, and is statistically significant at the 5% level.
+
+### Table 4, Column (i): OLS Regression
+
+The DiD can be expressed as a simple regression of the *change* in FTE on an NJ indicator:
+
+$$\Delta \text{FTE}_i = \alpha + \beta \cdot \mathbf{1}[\text{NJ}_i] + \varepsilon_i$$
+
+The coefficient $\beta$ is the DiD estimate; $\alpha$ is the average change in PA.
+
+```{python}
+data = df_v.dropna(subset=['delta_fte']).copy()
+X = np.column_stack([np.ones(len(data)), data['nj']])
+y = data['delta_fte'].values
+
+beta = np.linalg.lstsq(X, y, rcond=None)[0]
+resid = y - X @ beta
+n, k = len(y), 2
+se = np.sqrt(np.diag(np.linalg.inv(X.T @ X) * (resid**2).sum() / (n-k)))
+t_vals = beta / se
+p_vals = 2*(1 - stats.t.cdf(abs(t_vals), df=n-k))
+
+reg_table = pd.DataFrame({
+    'Coefficient': [round(beta[0],3), round(beta[1],3)],
+    'Std. Error':  [round(se[0],3),   round(se[1],3)],
+    't-stat':      [round(t_vals[0],2),round(t_vals[1],2)],
+    'p-value':     [round(p_vals[0],3),round(p_vals[1],3)],
+    'Sig.':        ['**','**'],
+}, index=['Constant (= PA mean change)', 'NJ (DiD estimate)'])
+
+reg_table
+```
+
+The NJ coefficient (+2.722) matches the Table 3 DiD exactly. The constant (−2.064) confirms that PA employment fell on average. Standard errors differ slightly from the paper because Card & Krueger used heteroskedasticity-robust SEs.
+
+## Something Additional: Visualizing the DiD and Chain-Level Heterogeneity
+
+```{python}
+import matplotlib.pyplot as plt
+
+fig, axes = plt.subplots(1, 2, figsize=(13, 5))
+
+ax = axes[0]
+counterfactual = [nj_b, nj_b + pa_ch]
+ax.plot([0,1], [nj_b,nj_a], 'b-o', lw=2.5, ms=8, label='New Jersey (NJ)')
+ax.plot([0,1], [pa_b,pa_a], 'r-o', lw=2.5, ms=8, label='Pennsylvania (PA)')
+ax.plot([0,1], counterfactual, 'b--', lw=1.5, alpha=0.5, label='NJ counterfactual')
+ax.annotate('', xy=(1, nj_a), xytext=(1, counterfactual[1]),
+            arrowprops=dict(arrowstyle='<->', color='green', lw=2.2))
+ax.text(1.04, (nj_a+counterfactual[1])/2,
+        f'DiD = {did:.2f}', color='green', fontsize=12, fontweight='bold')
+ax.set_xticks([0,1])
+ax.set_xticklabels(['Before\n(Feb 1992)', 'After\n(Nov 1992)'], fontsize=11)
+ax.set_ylabel('Average FTE Employment', fontsize=11)
+ax.set_title('Diff-in-Diff:\nNJ Minimum Wage Effect on Employment', fontsize=12)
+ax.legend(fontsize=10)
+ax.grid(True, alpha=0.3)
+
+ax2 = axes[1]
+chains = {1:'Burger King', 2:'KFC', 3:'Roy Rogers', 4:"Wendy's"}
+results = []
+for c, name in chains.items():
+    sub = df_v[df_v['chain']==c]
+    nj_c = sub[sub['nj']==1]
+    pa_c = sub[sub['nj']==0]
+    if len(pa_c) == 0: continue
+    d = (nj_c['fte2'].mean()-nj_c['fte'].mean()) - (pa_c['fte2'].mean()-pa_c['fte'].mean())
+    results.append((name, d))
+names_c = [x[0] for x in results]
+dids_c  = [x[1] for x in results]
+colors = ['steelblue' if d>0 else 'tomato' for d in dids_c]
+bars = ax2.barh(names_c, dids_c, color=colors, edgecolor='black')
+ax2.axvline(0, color='black', lw=1)
+ax2.axvline(did, color='green', lw=2, linestyle='--', label=f'Overall DiD = {did:.2f}')
+for bar, val in zip(bars, dids_c):
+    ax2.text(val+(0.3 if val>=0 else -0.3), bar.get_y()+bar.get_height()/2,
+             f'{val:.2f}', va='center', ha='left' if val>=0 else 'right', fontsize=10)
+ax2.set_xlabel('DiD Estimate (ΔFte_NJ − ΔFte_PA)', fontsize=11)
+ax2.set_title('DiD Estimate by Fast Food Chain', fontsize=12)
+ax2.legend(fontsize=10)
+ax2.grid(axis='x', alpha=0.3)
+
+plt.suptitle("Card & Krueger (1994): Minimum Wage & Fast Food Employment",
+             fontsize=13, fontweight='bold')
+plt.tight_layout()
+plt.show()
+```
+
+The left panel shows the classic DiD visualization. PA employment fell over this period; the dashed line shows what NJ *would have done* absent the policy. Instead NJ rose, yielding a causal gap of **+2.72 FTE**.
+
+The right panel breaks the result down by chain. Three of four chains (Burger King, Roy Rogers, Wendy's) show positive DiD estimates — the result is not driven by any single chain. KFC is the only exception. This robustness across chains strengthens the causal interpretation.
+
+### Why Does DiD Enable Causal Inference?
+
+DiD removes two sources of bias simultaneously. First, any **time-invariant differences** between NJ and PA (size, location, chain mix) cancel in the within-state first difference. Second, any **common time trends** — recessions, seasonal patterns, industry shocks — cancel in the cross-state second difference. What remains is attributable to the minimum wage policy alone, provided the **parallel trends assumption** holds.
+
+Card and Krueger's result suggested that **monopsony power** in low-wage labor markets can explain why modest minimum wage increases need not reduce employment — a mechanism that has since gained broad empirical support and fundamentally changed how economists think about minimum wage policy.
