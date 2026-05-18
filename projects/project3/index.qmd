@@ -260,7 +260,7 @@ X["age_sq"] = df["age"]**2
 X["iscustomer"] = df["iscustomer"]
 
 X = sm.add_constant(X)
-
+X = X.astype(float)
 Y = df["patents"].values
 X.head()
 ```

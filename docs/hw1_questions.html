@@ -268,7 +268,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="simulating-data">Simulating Data</h2>
 <p>To gain a more intuitive understanding of how A/B testing works, we can use simulated data to observe behavioral differences between the two groups of users.</p>
 <p>In this example, we assume that users who see CTA A are slightly more likely to register than those who see CTA B.</p>
-<div id="5e8d6a87" class="cell" data-execution_count="1">
+<div id="965ae003" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">123</span>)</span>
@@ -295,7 +295,7 @@ Difference: 0.015</code></pre>
 <section id="the-law-of-large-numbers" class="level2">
 <h2 class="anchored" data-anchor-id="the-law-of-large-numbers">The Law of Large Numbers</h2>
 <p>The results of a single simulation may be subject to random variation, so we repeat the experiment multiple times to observe the distribution of the estimates.</p>
-<div id="46de2b49" class="cell" data-execution_count="2">
+<div id="dceb0a75" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>diffs <span class="op">=</span> []</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1000</span>):</span>
@@ -325,7 +325,7 @@ Difference: 0.015</code></pre>
 <p>Since the estimate is expected to converge to the true value over the long run, the next natural question is: How accurate is it? Simply reporting a single point estimate <span class="math inline">\(\hat{\theta}\)</span> is insufficient, as it does not tell the reader how much uncertainty is associated with this estimate. To quantify this uncertainty, we need to estimate the standard error.</p>
 <p>Bootstrapping is a very intuitive resampling method. It does not rely on complex theoretical derivations but instead repeatedly samples with replacement directly from the available sample data, simulating “how the estimator would vary if we performed many similar samplings.” Each bootstrap resample produces a new <span class="math inline">\(\hat{\theta}^*\)</span>, and the standard deviation of these resampled estimates can be taken as the bootstrap standard error.</p>
 <p>Below, we perform 1,000 with-replacement resamples from the 1,000 observations in each of Groups A and B, and repeat this process 1,000 times.</p>
-<div id="5a4aeb10" class="cell" data-execution_count="3">
+<div id="0ec99dcd" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>boot_diffs <span class="op">=</span> []</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1000</span>):</span>
@@ -345,7 +345,7 @@ Difference: 0.015</code></pre>
 SE(\hat\theta) = \sqrt{\frac{\hat\pi_A(1 - \hat\pi_A)}{n} + \frac{\hat\pi_B(1 - \hat\pi_B)}{n}}
 \]</span></p>
 <p>Here, <span class="math inline">\(\hat{\pi}_A\)</span> and <span class="math inline">\(\hat{\pi}_B\)</span> are the sample proportions.</p>
-<div id="09a1a6a5" class="cell" data-execution_count="4">
+<div id="cd911f28" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>pi_A_hat <span class="op">=</span> np.mean(A)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>pi_B_hat <span class="op">=</span> np.mean(B)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -365,7 +365,7 @@ Difference between SEs: 0.00037473372732061035</code></pre>
 <p>Finally, we use the bootstrap standard error to construct a 95% confidence interval: <span class="math display">\[
 \hat{\theta} \pm 1.96 \times SE_{bootstrap}
 \]</span></p>
-<div id="99474768" class="cell" data-execution_count="5">
+<div id="e272b90d" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>theta_hat <span class="op">=</span> np.mean(A) <span class="op">-</span> np.mean(B)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>ci_lower <span class="op">=</span> theta_hat <span class="op">-</span> <span class="fl">1.96</span> <span class="op">*</span> boot_se</span>
@@ -384,7 +384,7 @@ Difference between SEs: 0.00037473372732061035</code></pre>
 <h2 class="anchored" data-anchor-id="the-central-limit-theorem">The Central Limit Theorem</h2>
 <p>In addition to bootstrapping, another important tool for understanding sampling distributions is the Central Limit Theorem (CLT). The CLT tells us that when the sample size is sufficiently large, even if the original data itself is not normally distributed, many statistics based on the mean will still approximately follow a normal distribution.</p>
 <p>In this A/B test, each visitor’s outcome is either 0 or 1, which is clearly not normally distributed data; however, <span class="math inline">\(\bar{X}_A - \bar{X}_B\)</span>, as the difference between the two sample means, will still have a sampling distribution that approximates a bell curve when the sample size is sufficiently large. This is why we can use normal approximation to construct confidence intervals and perform hypothesis tests.</p>
-<div id="f6a6ba27" class="cell" data-execution_count="6">
+<div id="8e63729a" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -448,7 +448,7 @@ Z \sim N(0,1)
 <p>This is crucial because once we know the distribution of the statistic under the null hypothesis, we can calculate the p-value to determine whether the observed result is unusual.</p>
 <p>It is worth noting that this method is often referred to as a “t-test,” but in this case, it is actually closer to a z-test. The traditional t-test is based on the assumption that the data comes from a normal distribution and the variance is unknown, in which case the test statistic follows a t-distribution. However, here, our data comes from a Bernoulli distribution, not a normal distribution; we rely on the Central Limit Theorem to obtain an approximation of a normal distribution. Therefore, the test here is actually a z-test based on a normal approximation. Since the sample size is very large, the t-distribution and the standard normal distribution are virtually indistinguishable, so this has little practical impact; however, understanding this distinction remains important.</p>
 <p>Next, we will use simulated data to calculate the test statistic and p-value:</p>
-<div id="a9240107" class="cell" data-execution_count="7">
+<div id="5cc536d2" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -499,7 +499,7 @@ Y_i = \beta_0 + \beta_1 D_i + \varepsilon_i
 <li>It follows that <span class="math inline">\(\beta_1 = \pi_A - \pi_B = \theta\)</span>, so the OLS estimate <span class="math inline">\(\hat{\beta}_1\)</span> is numerically identical to the difference in sample means, <span class="math inline">\(\hat{\theta}\)</span>.</li>
 </ol>
 <p>Next, we fit this regression using the simulated data.</p>
-<div id="05e03b0c" class="cell" data-execution_count="8">
+<div id="b39cf825" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -521,7 +521,7 @@ Dep. Variable:                      y   R-squared:                       0.008
 Model:                            OLS   Adj. R-squared:                  0.007
 Method:                 Least Squares   F-statistic:                     7.802
 Date:                Sun, 17 May 2026   Prob (F-statistic):            0.00532
-Time:                        19:06:03   Log-Likelihood:                -232.68
+Time:                        19:09:01   Log-Likelihood:                -232.68
 No. Observations:                1000   AIC:                             469.4
 Df Residuals:                     998   BIC:                             479.2
 Df Model:                           1                                         
@@ -543,7 +543,7 @@ Notes:
 </div>
 </div>
 <p>To extract the key quantities:</p>
-<div id="e2f2f3dc" class="cell" data-execution_count="9">
+<div id="7c6e425c" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>beta_1 <span class="op">=</span> model.params[<span class="dv">1</span>]</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>se_beta_1 <span class="op">=</span> model.bse[<span class="dv">1</span>]</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>t_stat <span class="op">=</span> model.tvalues[<span class="dv">1</span>]</span>
@@ -568,7 +568,7 @@ p-value: 0.005317513716905575</code></pre>
 <p>In practice, it is often tempting to monitor results as data are collected and stop an experiment early if a statistically significant result appears. For example, instead of waiting until all 1,000 observations per group are collected, one might run a hypothesis test after every 100 observations and stop as soon as a p-value falls below 0.05.</p>
 <p>Under classical frequentist statistics, this approach is problematic. A single hypothesis test conducted at the <span class="math inline">\(\alpha = 0.05\)</span> level has a 5% probability of a Type I error — that is, incorrectly rejecting the null hypothesis when it is actually true. However, if we repeatedly test the data as it accumulates, each “peek” creates another opportunity to obtain a false positive. As a result, the overall probability of making at least one false rejection becomes much larger than 5%.</p>
 <p>To demonstrate this, we simulate a scenario in which the null hypothesis is true. Specifically, we assume that both CTAs have the same sign-up probability, <span class="math inline">\(\pi_A = \pi_B = 0.20\)</span>, so there is no real difference between the groups.</p>
-<div id="e4659541" class="cell" data-execution_count="10">
+<div id="50a8e7f0" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
