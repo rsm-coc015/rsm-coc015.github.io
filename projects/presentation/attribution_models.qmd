@@ -1,0 +1,192 @@
+---
+title: "Who Gets the Credit?"
+subtitle: "Understanding Marketing Attribution Models"
+author: "Corrine"
+format:
+  revealjs:
+    theme: dark
+    transition: fade
+    slide-number: true
+    fontsize: 1.8em
+    margin: 0.08
+execute:
+  echo: false
+  warning: false
+---
+
+## The Problem {background-color="#1E2761"}
+
+::: {style="text-align: center; font-size: 1.2em; margin-top: 1em;"}
+A customer sees a **Facebook ad** →
+searches on **Google** →
+clicks an **email** →
+**buys**.
+:::
+
+::: {style="text-align: center; margin-top: 1.5em; font-size: 1.1em; color: #CADCFC;"}
+Who gets the credit for that conversion?
+:::
+
+::: {style="text-align: center; margin-top: 1em; font-size: 0.9em; color: #aaa;"}
+The answer depends entirely on which attribution model you choose.
+:::
+
+---
+
+## 5 Attribution Models {background-color="#1C2951"}
+
+| Model | Logic |
+|---|---|
+| **First-touch** | 100% credit → first touchpoint |
+| **Last-touch** | 100% credit → last touchpoint |
+| **Linear** | Credit split equally across all touches |
+| **Time Decay** | More credit to touches closer to conversion |
+| **Position-based** | 40% first · 20% middle · 40% last |
+
+::: {style="font-size: 0.75em; color: #CADCFC; margin-top: 1em;"}
+Same customer journey. Five different answers.
+:::
+
+---
+
+## Visualizing the Difference {background-color="#1C2951"}
+
+*One journey: Facebook → Google → Email → Purchase*
+
+```{python}
+import matplotlib.pyplot as plt
+import numpy as np
+
+models = ['First-touch', 'Last-touch', 'Linear', 'Time Decay', 'Position-based']
+channels = ['Facebook', 'Google', 'Email']
+
+# Credit allocation per model
+data = {
+    'First-touch':     [1.00, 0.00, 0.00],
+    'Last-touch':      [0.00, 0.00, 1.00],
+    'Linear':          [0.33, 0.33, 0.33],
+    'Time Decay':      [0.14, 0.29, 0.57],
+    'Position-based':  [0.40, 0.20, 0.40],
+}
+
+x = np.arange(len(channels))
+width = 0.15
+colors = ['#4FC3F7', '#81C784', '#FFD54F', '#FF8A65', '#CE93D8']
+
+fig, ax = plt.subplots(figsize=(10, 4.5))
+fig.patch.set_facecolor('#1C2951')
+ax.set_facecolor('#1C2951')
+
+for i, (model, credits) in enumerate(data.items()):
+    offset = (i - 2) * width
+    bars = ax.bar(x + offset, credits, width, label=model, color=colors[i], alpha=0.9)
+
+ax.set_ylabel('Credit Allocated', color='white', fontsize=12)
+ax.set_xticks(x)
+ax.set_xticklabels(channels, color='white', fontsize=13)
+ax.tick_params(colors='white')
+ax.set_ylim(0, 1.1)
+ax.yaxis.set_tick_params(labelcolor='white')
+ax.spines[:].set_color('#555')
+ax.legend(loc='upper right', fontsize=9, framealpha=0.3, labelcolor='white')
+ax.set_title('Credit Allocation by Model — Same Journey', color='white', fontsize=13, pad=12)
+
+plt.tight_layout()
+plt.savefig('attribution_chart.png', dpi=150, bbox_inches='tight', facecolor='#1C2951')
+plt.show()
+```
+
+---
+
+## The Numbers Can Diverge Drastically {background-color="#1C2951"}
+
+*Imagine 1,000 conversions across Facebook, Google, Email*
+
+```{python}
+import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+
+# Simulated channel-level credit (sum across all journeys)
+models = ['First-touch', 'Last-touch', 'Linear', 'Time Decay', 'Position-based']
+facebook = [420, 50,  280, 160, 370]
+google   = [130, 120, 280, 260, 190]
+email    = [50,  530, 280, 380, 240]
+# remaining goes to "Other"
+other    = [1000-f-g-e for f,g,e in zip(facebook,google,email)]
+
+x = np.arange(len(models))
+width = 0.55
+colors_ch = ['#4FC3F7', '#81C784', '#FFD54F', '#CE93D8']
+
+fig, ax = plt.subplots(figsize=(10, 4.5))
+fig.patch.set_facecolor('#1C2951')
+ax.set_facecolor('#1C2951')
+
+b1 = ax.bar(x, facebook, width, label='Facebook', color=colors_ch[0])
+b2 = ax.bar(x, google,   width, bottom=facebook, label='Google', color=colors_ch[1])
+b3 = ax.bar(x, email,    width, bottom=[f+g for f,g in zip(facebook,google)], label='Email', color=colors_ch[2])
+
+ax.set_xticks(x)
+ax.set_xticklabels(models, color='white', fontsize=11)
+ax.set_ylabel('Attributed Conversions (out of 1,000)', color='white', fontsize=11)
+ax.tick_params(colors='white')
+ax.yaxis.set_tick_params(labelcolor='white')
+ax.spines[:].set_color('#555')
+ax.legend(loc='upper right', fontsize=10, framealpha=0.3, labelcolor='white')
+ax.set_title('Same 1,000 Conversions — Very Different Channel Credit', color='white', fontsize=13, pad=12)
+
+plt.tight_layout()
+plt.savefig('channel_chart.png', dpi=150, bbox_inches='tight', facecolor='#1C2951')
+plt.show()
+```
+
+::: {style="font-size: 0.75em; color: #FFD54F; margin-top: 0.5em;"}
+Facebook credit: **50 → 420** depending on model chosen.
+:::
+
+---
+
+## Which Model Should You Use? {background-color="#1C2951"}
+
+::: columns
+::: {.column width="50%"}
+**Business Goal → Model**
+
+- 🎯 Brand awareness → **First-touch**
+- 💰 Direct conversion → **Last-touch**
+- ⚖️ Balanced view → **Linear**
+- 🕐 Recency matters → **Time Decay**
+- 🔁 Nurture + close → **Position-based**
+:::
+
+::: {.column width="50%"}
+**Advanced: Spend-Weighted**
+
+Weight credit not just by position,
+but by **how much was spent**
+at each touchpoint.
+
+::: {style="color: #CADCFC; font-size: 0.85em; margin-top: 0.8em;"}
+Channels that cost more
+get held to a higher standard.
+:::
+:::
+:::
+
+---
+
+## Takeaway {background-color="#1E2761"}
+
+::: {style="text-align: center; font-size: 1.3em; margin-top: 1.5em; line-height: 1.6;"}
+Attribution isn't a statistics problem.
+
+It's a **business decision**.
+:::
+
+::: {style="text-align: center; font-size: 0.95em; color: #CADCFC; margin-top: 1.5em;"}
+The model you choose determines which channels
+get budget next quarter.
+
+Choose deliberately.
+:::

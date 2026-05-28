@@ -1,0 +1,51 @@
+[
+  {
+    "objectID": "projects.html",
+    "href": "projects.html",
+    "title": "My Projects",
+    "section": "",
+    "text": "A/B Testing a Call to Action\n\n\n\n\n\n\nCorrine Chen\n\n\nMay 28, 2026\n\n\n\n\n\n\n\n\n\n\n\nPoisson Regression and Maximum Likelihood Estimation\n\n\n\n\n\n\nCorrine Chen\n\n\nMay 28, 2026\n\n\n\n\n\n\n\n\n\n\n\nReplication of Card and Krueger (1994)\n\n\n\n\n\n\nCorrine Chen\n\n\nMay 28, 2026\n\n\n\n\n\n\n\n\n\n\n\nWho Gets the Credit?\n\n\n\n\n\n\nCorrine\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "projects/presentation/attribution_models.html#the-problem",
+    "href": "projects/presentation/attribution_models.html#the-problem",
+    "title": "Who Gets the Credit?",
+    "section": "The Problem",
+    "text": "The Problem\n\nA customer sees a Facebook ad →\nsearches on Google →\nclicks an email →\nbuys.\n\n\nWho gets the credit for that conversion?\n\n\nThe answer depends entirely on which attribution model you choose."
+  },
+  {
+    "objectID": "projects/presentation/attribution_models.html#attribution-models",
+    "href": "projects/presentation/attribution_models.html#attribution-models",
+    "title": "Who Gets the Credit?",
+    "section": "5 Attribution Models",
+    "text": "5 Attribution Models\n\n\n\nModel\nLogic\n\n\n\n\nFirst-touch\n100% credit → first touchpoint\n\n\nLast-touch\n100% credit → last touchpoint\n\n\nLinear\nCredit split equally across all touches\n\n\nTime Decay\nMore credit to touches closer to conversion\n\n\nPosition-based\n40% first · 20% middle · 40% last\n\n\n\n\nSame customer journey. Five different answers."
+  },
+  {
+    "objectID": "projects/presentation/attribution_models.html#visualizing-the-difference",
+    "href": "projects/presentation/attribution_models.html#visualizing-the-difference",
+    "title": "Who Gets the Credit?",
+    "section": "Visualizing the Difference",
+    "text": "Visualizing the Difference\nOne journey: Facebook → Google → Email → Purchase"
+  },
+  {
+    "objectID": "projects/presentation/attribution_models.html#the-numbers-can-diverge-drastically",
+    "href": "projects/presentation/attribution_models.html#the-numbers-can-diverge-drastically",
+    "title": "Who Gets the Credit?",
+    "section": "The Numbers Can Diverge Drastically",
+    "text": "The Numbers Can Diverge Drastically\nImagine 1,000 conversions across Facebook, Google, Email\n\n\n\n\n\n\n\n\n\n\nFacebook credit: 50 → 420 depending on model chosen."
+  },
+  {
+    "objectID": "projects/presentation/attribution_models.html#which-model-should-you-use",
+    "href": "projects/presentation/attribution_models.html#which-model-should-you-use",
+    "title": "Who Gets the Credit?",
+    "section": "Which Model Should You Use?",
+    "text": "Which Model Should You Use?\n\n\nBusiness Goal → Model\n\n🎯 Brand awareness → First-touch\n\n💰 Direct conversion → Last-touch\n\n⚖️ Balanced view → Linear\n\n🕐 Recency matters → Time Decay\n\n🔁 Nurture + close → Position-based\n\n\n\nAdvanced: Spend-Weighted\nWeight credit not just by position,\nbut by how much was spent\nat each touchpoint.\n\nChannels that cost more\nget held to a higher standard."
+  },
+  {
+    "objectID": "projects/presentation/attribution_models.html#takeaway",
+    "href": "projects/presentation/attribution_models.html#takeaway",
+    "title": "Who Gets the Credit?",
+    "section": "Takeaway",
+    "text": "Takeaway\n\nAttribution isn’t a statistics problem.\nIt’s a business decision.\n\n\nThe model you choose determines which channels\nget budget next quarter.\nChoose deliberately."
+  }
+]
