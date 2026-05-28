@@ -6,11 +6,10 @@
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-ea00d30dd9b950c7ecb6e17bc6ca0835.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ac077c1e730dfeb5e42400639d17284e.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.9.13">
 
-  <meta name="author" content="Corrine">
-  <title>Corrine Chen – Who Gets the Credit?</title>
+  <title>Corrine Chen – Attribution Models: Same Journey, Different Conclusions</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -29,7 +28,7 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-4269424e8e825dd2cceba1fadfd2db86.css">
+  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-ebd1336cb203d38cba089e5b49076929.css">
   <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -122,78 +121,124 @@
     }
   </style>
 </head>
-<body class="quarto-dark">
+<body class="quarto-light">
   <div class="reveal">
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Who Gets the Credit?</h1>
-  <p class="subtitle">Understanding Marketing Attribution Models</p>
+  <h1 class="title">Attribution Models: Same Journey, Different Conclusions</h1>
+  <p class="subtitle">Which Channel Actually Drove the Sale?</p>
 
 <div class="quarto-title-authors">
-<div class="quarto-title-author">
-<div class="quarto-title-author-name">
-Corrine 
-</div>
-</div>
 </div>
 
 </section>
-<section id="the-problem" class="slide level2" data-background-color="#1E2761">
+<section id="the-problem" class="slide level2" data-background-color="#F4F4F4">
 <h2>The Problem</h2>
-<div style="text-align: center; font-size: 1.2em; margin-top: 1em;">
-<p>A customer sees a <strong>Facebook ad</strong> →<br>
-searches on <strong>Google</strong> →<br>
-clicks an <strong>email</strong> →<br>
-<strong>buys</strong>.</p>
+<div style="display:flex; justify-content:center; align-items:flex-start; gap:16px; margin-top:2em;">
+  <div style="text-align:center;">
+    <div style="width:150px;height:150px;border-radius:50%;background:#1877F2;display:flex;align-items:center;justify-content:center;font-size:3.5em;">📘</div>
+    <div style="margin-top:0.8em;font-weight:bold;color:#222;">Facebook Ad</div>
+  </div>
+  <div style="font-size:2.5em;color:#aaa;margin-top:50px;">→</div>
+  <div style="text-align:center;">
+    <div style="width:150px;height:150px;border-radius:50%;background:#EA4335;display:flex;align-items:center;justify-content:center;font-size:3.5em;">🔍</div>
+    <div style="margin-top:0.8em;font-weight:bold;color:#222;">Google Search</div>
+  </div>
+  <div style="font-size:2.5em;color:#aaa;margin-top:50px;">→</div>
+  <div style="text-align:center;">
+    <div style="width:150px;height:150px;border-radius:50%;background:#34A853;display:flex;align-items:center;justify-content:center;font-size:3.5em;">📧</div>
+    <div style="margin-top:0.8em;font-weight:bold;color:#222;">Email Click</div>
+  </div>
+  <div style="font-size:2.5em;color:#aaa;margin-top:50px;">→</div>
+  <div style="text-align:center;">
+    <div style="width:150px;height:150px;border-radius:50%;background:#F4A700;display:flex;align-items:center;justify-content:center;font-size:3.5em;">💰</div>
+    <div style="margin-top:0.8em;font-weight:bold;color:#222;">Purchase</div>
+  </div>
 </div>
-<div style="text-align: center; margin-top: 1.5em; font-size: 1.1em; color: #CADCFC;">
+<div style="text-align: center; margin-top: 1.5em; font-size: 1.1em; color: #1a3a6b;">
 <p>Who gets the credit for that conversion?</p>
 </div>
-<div style="text-align: center; margin-top: 1em; font-size: 0.9em; color: #aaa;">
+<div style="text-align: center; margin-top: 0.8em; font-size: 0.9em; color: #444444;">
 <p>The answer depends entirely on which attribution model you choose.</p>
 </div>
 </section>
-<section id="attribution-models" class="slide level2" data-background-color="#1C2951">
+<section id="attribution-models" class="slide level2" data-background-color="#F4F4F4">
 <h2>5 Attribution Models</h2>
-<table class="caption-top">
-<thead>
-<tr class="header">
-<th>Model</th>
-<th>Logic</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>First-touch</strong></td>
-<td>100% credit → first touchpoint</td>
-</tr>
-<tr class="even">
-<td><strong>Last-touch</strong></td>
-<td>100% credit → last touchpoint</td>
-</tr>
-<tr class="odd">
-<td><strong>Linear</strong></td>
-<td>Credit split equally across all touches</td>
-</tr>
-<tr class="even">
-<td><strong>Time Decay</strong></td>
-<td>More credit to touches closer to conversion</td>
-</tr>
-<tr class="odd">
-<td><strong>Position-based</strong></td>
-<td>40% first · 20% middle · 40% last</td>
-</tr>
-</tbody>
-</table>
-<div style="font-size: 0.75em; color: #CADCFC; margin-top: 1em;">
+<div style="display:flex; justify-content:center; gap:12px; margin-top:1em; flex-wrap:wrap;">
+  <div style="background:#4A90D9;border-radius:12px;padding:16px 12px;width:140px;text-align:center;color:white;">
+    <div style="font-size:1.8em;">1️⃣</div>
+    <div style="font-weight:bold;margin-top:8px;">First-touch</div>
+    <div style="font-size:0.75em;margin-top:6px;opacity:0.9;">100% to first contact</div>
+  </div>
+  <div style="background:#E07B4F;border-radius:12px;padding:16px 12px;width:140px;text-align:center;color:white;">
+    <div style="font-size:1.8em;">🏁</div>
+    <div style="font-weight:bold;margin-top:8px;">Last-touch</div>
+    <div style="font-size:0.75em;margin-top:6px;opacity:0.9;">100% to last contact</div>
+  </div>
+  <div style="background:#5BAD6F;border-radius:12px;padding:16px 12px;width:140px;text-align:center;color:white;">
+    <div style="font-size:1.8em;">⚖️</div>
+    <div style="font-weight:bold;margin-top:8px;">Linear</div>
+    <div style="font-size:0.75em;margin-top:6px;opacity:0.9;">Equal split across all</div>
+  </div>
+  <div style="background:#9B72B0;border-radius:12px;padding:16px 12px;width:140px;text-align:center;color:white;">
+    <div style="font-size:1.8em;">⏱️</div>
+    <div style="font-weight:bold;margin-top:8px;">Time Decay</div>
+    <div style="font-size:0.75em;margin-top:6px;opacity:0.9;">More credit near conversion</div>
+  </div>
+  <div style="background:#E6A817;border-radius:12px;padding:16px 12px;width:140px;text-align:center;color:white;">
+    <div style="font-size:1.8em;">🔱</div>
+    <div style="font-weight:bold;margin-top:8px;">Position-based</div>
+    <div style="font-size:0.75em;margin-top:6px;opacity:0.9;">40% · 20% · 40%</div>
+  </div>
+</div>
+
+<div style="margin-top:1.2em; font-size:0.85em;">
+  <div style="display:flex;align-items:center;margin-bottom:8px;">
+    <div style="width:130px;font-weight:bold;color:#222;">First-touch</div>
+    <div style="width:280px;height:24px;background:#4A90D9;border-radius:4px;"></div>
+    <div style="margin-left:8px;color:#666;">100% · 0% · 0%</div>
+  </div>
+  <div style="display:flex;align-items:center;margin-bottom:8px;">
+    <div style="width:130px;font-weight:bold;color:#222;">Last-touch</div>
+    <div style="width:280px;height:24px;background:#E07B4F;border-radius:4px;"></div>
+    <div style="margin-left:8px;color:#666;">0% · 0% · 100%</div>
+  </div>
+  <div style="display:flex;align-items:center;margin-bottom:8px;">
+    <div style="width:130px;font-weight:bold;color:#222;">Linear</div>
+    <div style="width:91px;height:24px;background:#5BAD6F;border-radius:4px;"></div>
+    <div style="width:91px;height:24px;background:#5BAD6F;border-radius:4px;margin-left:2px;"></div>
+    <div style="width:91px;height:24px;background:#5BAD6F;border-radius:4px;margin-left:2px;"></div>
+    <div style="margin-left:8px;color:#666;">33% · 33% · 33%</div>
+  </div>
+  <div style="display:flex;align-items:center;margin-bottom:8px;">
+    <div style="width:130px;font-weight:bold;color:#222;">Time Decay</div>
+    <div style="width:40px;height:24px;background:#9B72B0;border-radius:4px;"></div>
+    <div style="width:80px;height:24px;background:#9B72B0;border-radius:4px;margin-left:2px;opacity:0.75;"></div>
+    <div style="width:160px;height:24px;background:#9B72B0;border-radius:4px;margin-left:2px;opacity:0.55;"></div>
+    <div style="margin-left:8px;color:#666;">14% · 29% · 57%</div>
+  </div>
+  <div style="display:flex;align-items:center;margin-bottom:8px;">
+    <div style="width:130px;font-weight:bold;color:#222;">Position-based</div>
+    <div style="width:112px;height:24px;background:#E6A817;border-radius:4px;"></div>
+    <div style="width:56px;height:24px;background:#E6A817;border-radius:4px;margin-left:2px;opacity:0.5;"></div>
+    <div style="width:112px;height:24px;background:#E6A817;border-radius:4px;margin-left:2px;"></div>
+    <div style="margin-left:8px;color:#666;">40% · 20% · 40%</div>
+  </div>
+  <div style="display:flex;margin-left:130px;margin-top:6px;font-size:0.8em;color:#888;">
+    <div style="width:93px;text-align:center;">First touch</div>
+    <div style="width:93px;text-align:center;">Middle</div>
+    <div style="width:93px;text-align:center;">Last touch</div>
+  </div>
+</div>
+<div style="font-size:0.75em; color:#555555; margin-top:0.8em;">
 <p>Same customer journey. Five different answers.</p>
 </div>
 </section>
-<section id="visualizing-the-difference" class="slide level2" data-background-color="#1C2951">
+<section id="visualizing-the-difference" class="slide level2" data-background-color="#F4F4F4">
 <h2>Visualizing the Difference</h2>
 <p><em>One journey: Facebook → Google → Email → Purchase</em></p>
-<div id="4e990bd4" class="cell" data-execution_count="1">
+<div id="559a24e5" class="cell" data-execution_count="1">
 <div class="cell-output cell-output-display">
 <div>
 <figure>
@@ -203,10 +248,10 @@ clicks an <strong>email</strong> →<br>
 </div>
 </div>
 </section>
-<section id="the-numbers-can-diverge-drastically" class="slide level2" data-background-color="#1C2951">
+<section id="the-numbers-can-diverge-drastically" class="slide level2" data-background-color="#F4F4F4">
 <h2>The Numbers Can Diverge Drastically</h2>
 <p><em>Imagine 1,000 conversions across Facebook, Google, Email</em></p>
-<div id="477dd8c6" class="cell" data-execution_count="2">
+<div id="3e328477" class="cell" data-execution_count="2">
 <div class="cell-output cell-output-display">
 <div>
 <figure>
@@ -215,47 +260,38 @@ clicks an <strong>email</strong> →<br>
 </div>
 </div>
 </div>
-<div style="font-size: 0.75em; color: #FFD54F; margin-top: 0.5em;">
+<div style="font-size: 0.75em; color: #1a3a6b; margin-top: 0.5em;">
 <p>Facebook credit: <strong>50 → 420</strong> depending on model chosen.</p>
 </div>
 </section>
-<section id="which-model-should-you-use" class="slide level2" data-background-color="#1C2951">
+<section id="which-model-should-you-use" class="slide level2" data-background-color="#F4F4F4">
 <h2>Which Model Should You Use?</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>Business Goal → Model</strong></p>
 <ul>
-<li>🎯 Brand awareness → <strong>First-touch</strong><br>
-</li>
-<li>💰 Direct conversion → <strong>Last-touch</strong><br>
-</li>
-<li>⚖️ Balanced view → <strong>Linear</strong><br>
-</li>
-<li>🕐 Recency matters → <strong>Time Decay</strong><br>
-</li>
-<li>🔁 Nurture + close → <strong>Position-based</strong><br>
-</li>
+<li>🎯 Brand awareness → <strong>First-touch</strong></li>
+<li>💰 Direct conversion → <strong>Last-touch</strong></li>
+<li>⚖️ Balanced view → <strong>Linear</strong></li>
+<li>🕐 Recency matters → <strong>Time Decay</strong></li>
+<li>🔁 Nurture + close → <strong>Position-based</strong></li>
 </ul>
 </div><div class="column" style="width:50%;">
 <p><strong>Advanced: Spend-Weighted</strong></p>
-<p>Weight credit not just by position,<br>
-but by <strong>how much was spent</strong><br>
-at each touchpoint.</p>
-<div style="color: #CADCFC; font-size: 0.85em; margin-top: 0.8em;">
-<p>Channels that cost more<br>
-get held to a higher standard.</p>
+<p>Weight credit not just by position, but by <strong>how much was spent</strong> at each touchpoint.</p>
+<div style="color: #1a3a6b; font-size: 0.85em; margin-top: 0.8em;">
+<p>Channels that cost more get held to a higher standard.</p>
 </div>
 </div></div>
 </section>
-<section id="takeaway" class="slide level2" data-background-color="#1E2761">
+<section id="takeaway" class="slide level2" data-background-color="#F4F4F4">
 <h2>Takeaway</h2>
 <div style="text-align: center; font-size: 1.3em; margin-top: 1.5em; line-height: 1.6;">
 <p>Attribution isn’t a statistics problem.</p>
 <p>It’s a <strong>business decision</strong>.</p>
 </div>
-<div style="text-align: center; font-size: 0.95em; color: #CADCFC; margin-top: 1.5em;">
-<p>The model you choose determines which channels<br>
-get budget next quarter.</p>
+<div style="text-align: center; font-size: 0.95em; color: #1a3a6b; margin-top: 1.5em;">
+<p>The model you choose determines which channels get budget next quarter.</p>
 <p>Choose deliberately.</p>
 </div>
 
