@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Corrine Chen">
-<meta name="dcterms.date" content="2026-05-17">
+<meta name="dcterms.date" content="2026-05-28">
 
 <title>Poisson Regression and Maximum Likelihood Estimation – Corrine Chen</title>
 <style>
@@ -245,7 +245,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">May 17, 2026</p>
+      <p class="date">May 28, 2026</p>
     </div>
   </div>
   
@@ -265,7 +265,7 @@ window.Quarto = {
 <section id="exploring-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="exploring-the-data">Exploring the Data</h2>
 <p>Before estimating the Poisson regression model, it is useful to explore the distribution of the main variables and examine how Blueprinty customers differ from non-customers. In particular, the exploratory analysis helps determine whether customer firms systematically vary in age or geographic location, both of which may independently influence patent production.</p>
-<div id="987bfe8c" class="cell" data-execution_count="1">
+<div id="c5e2c670" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -374,7 +374,7 @@ window.Quarto = {
 </div>
 <section id="distribution-of-patent-counts" class="level3">
 <h3 class="anchored" data-anchor-id="distribution-of-patent-counts">Distribution of Patent Counts</h3>
-<div id="eddc244e" class="cell" data-execution_count="2">
+<div id="cb0492b0" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">5</span>))</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>plt.hist(df[<span class="st">"patents"</span>], bins<span class="op">=</span><span class="dv">20</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -410,7 +410,7 @@ Variance: 5.534254391816766</code></pre>
 </section>
 <section id="patent-counts-by-customer-status" class="level3">
 <h3 class="anchored" data-anchor-id="patent-counts-by-customer-status">Patent Counts by Customer Status</h3>
-<div id="5184beb4" class="cell" data-execution_count="3">
+<div id="12115366" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>customer_means <span class="op">=</span> df.groupby(<span class="st">"iscustomer"</span>)[<span class="st">"patents"</span>].mean()</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">5</span>), sharex<span class="op">=</span><span class="va">True</span>, sharey<span class="op">=</span><span class="va">True</span>)</span>
@@ -446,7 +446,7 @@ Name: patents, dtype: float64</code></pre>
 </section>
 <section id="regional-differences" class="level3">
 <h3 class="anchored" data-anchor-id="regional-differences">Regional Differences</h3>
-<div id="35e42992" class="cell" data-execution_count="4">
+<div id="b6dd87fe" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>region_table <span class="op">=</span> pd.crosstab(df[<span class="st">"region"</span>], df[<span class="st">"iscustomer"</span>], normalize<span class="op">=</span><span class="st">"columns"</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>region_table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -503,7 +503,7 @@ Name: patents, dtype: float64</code></pre>
 </section>
 <section id="age-differences" class="level3">
 <h3 class="anchored" data-anchor-id="age-differences">Age Differences</h3>
-<div id="3c17f58a" class="cell" data-execution_count="5">
+<div id="d7fb9076" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">5</span>), sharex<span class="op">=</span><span class="va">True</span>, sharey<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].hist(df[df[<span class="st">"iscustomer"</span>] <span class="op">==</span> <span class="dv">0</span>][<span class="st">"age"</span>], bins<span class="op">=</span><span class="dv">15</span>)</span>
@@ -571,7 +571,7 @@ L(\lambda)
 \]</span></p>
 <section id="coding-the-log-likelihood" class="level3">
 <h3 class="anchored" data-anchor-id="coding-the-log-likelihood">Coding the Log-Likelihood</h3>
-<div id="502f1821" class="cell" data-execution_count="6">
+<div id="f226fda6" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.special <span class="im">import</span> gammaln</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> poisson_loglikelihood(lambda_param, Y):</span>
@@ -589,7 +589,7 @@ L(\lambda)
 </section>
 <section id="plotting-the-log-likelihood" class="level3">
 <h3 class="anchored" data-anchor-id="plotting-the-log-likelihood">Plotting the Log-Likelihood</h3>
-<div id="764c9e8c" class="cell" data-execution_count="7">
+<div id="ecc100d4" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>Y <span class="op">=</span> df[<span class="st">"patents"</span>].values</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>lambda_grid <span class="op">=</span> np.linspace(<span class="fl">0.1</span>, <span class="dv">8</span>, <span class="dv">200</span>)</span>
@@ -634,7 +634,7 @@ L(\lambda)
 </section>
 <section id="numerical-optimization" class="level3">
 <h3 class="anchored" data-anchor-id="numerical-optimization">Numerical Optimization</h3>
-<div id="19666dcf" class="cell" data-execution_count="8">
+<div id="ccf6e37a" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> negative_poisson_loglikelihood(params, Y):</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span>poisson_loglikelihood(params[<span class="dv">0</span>], Y)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -671,7 +671,7 @@ Y_i \sim \text{Poisson}(\lambda_i)
 <p>The exponential link function ensures that predicted patent rates remain strictly positive, even though the linear index <span class="math inline">\(X_i'\beta\)</span> can take any real value.</p>
 <section id="constructing-the-design-matrix" class="level3">
 <h3 class="anchored" data-anchor-id="constructing-the-design-matrix">Constructing the Design Matrix</h3>
-<div id="1308a3d4" class="cell" data-execution_count="9">
+<div id="212ab7c6" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> pd.get_dummies(</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    df[[<span class="st">"region"</span>]],</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    drop_first<span class="op">=</span><span class="va">True</span></span>
@@ -769,7 +769,7 @@ Y_i \sim \text{Poisson}(\lambda_i)
 </section>
 <section id="coding-the-regression-log-likelihood" class="level3">
 <h3 class="anchored" data-anchor-id="coding-the-regression-log-likelihood">Coding the Regression Log-Likelihood</h3>
-<div id="12e256a7" class="cell" data-execution_count="10">
+<div id="48567543" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> poisson_regression_loglikelihood(beta, Y, X):</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    linear_index <span class="op">=</span> X <span class="op">@</span> beta</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    lambda_i <span class="op">=</span> np.exp(linear_index)</span>
@@ -785,7 +785,7 @@ Y_i \sim \text{Poisson}(\lambda_i)
 </section>
 <section id="estimating-the-model-via-mle" class="level3">
 <h3 class="anchored" data-anchor-id="estimating-the-model-via-mle">Estimating the Model via MLE</h3>
-<div id="2cb3cbd0" class="cell" data-execution_count="11">
+<div id="34e1ce0d" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> negative_poisson_regression_loglikelihood(beta, Y, X):</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span>poisson_regression_loglikelihood(beta, Y, X)</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -810,13 +810,13 @@ Y_i \sim \text{Poisson}(\lambda_i)
 <span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>results_table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/tmp/ipykernel_17604/3188335545.py:3: RuntimeWarning: overflow encountered in exp
+<pre><code>/tmp/ipykernel_21093/3188335545.py:3: RuntimeWarning: overflow encountered in exp
   lambda_i = np.exp(linear_index)
 /opt/base-uv/.venv/lib/python3.13/site-packages/numpy/_core/fromnumeric.py:86: RuntimeWarning: overflow encountered in reduce
   return ufunc.reduce(obj, axis, dtype, out, **passkwargs)
 /opt/base-uv/.venv/lib/python3.13/site-packages/scipy/optimize/_numdiff.py:686: RuntimeWarning: invalid value encountered in subtract
   df = [f_eval - f0 for f_eval in f_evals]
-/tmp/ipykernel_17604/3188335545.py:3: RuntimeWarning: overflow encountered in exp
+/tmp/ipykernel_21093/3188335545.py:3: RuntimeWarning: overflow encountered in exp
   lambda_i = np.exp(linear_index)</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="11">
@@ -890,7 +890,7 @@ Y_i \sim \text{Poisson}(\lambda_i)
 </section>
 <section id="comparing-to-statsmodels-glm" class="level3">
 <h3 class="anchored" data-anchor-id="comparing-to-statsmodels-glm">Comparing to statsmodels GLM</h3>
-<div id="5222afb9" class="cell" data-execution_count="12">
+<div id="eee06546" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>glm_model <span class="op">=</span> smf.glm(</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    formula<span class="op">=</span><span class="st">"patents ~ iscustomer + age + I(age**2) + C(region)"</span>,</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>df,</span>
@@ -1018,7 +1018,7 @@ Y_i \sim \text{Poisson}(\lambda_i)
 <p>In both cases, all other firm characteristics — including age and region — are held fixed at their observed values.</p>
 <section id="counterfactual-predictions" class="level3">
 <h3 class="anchored" data-anchor-id="counterfactual-predictions">Counterfactual Predictions</h3>
-<div id="09dc13c4" class="cell" data-execution_count="13">
+<div id="7f4b555f" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>X0 <span class="op">=</span> df.copy()</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>X1 <span class="op">=</span> df.copy()</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
