@@ -1,0 +1,79 @@
+[
+  {
+    "objectID": "projects.html",
+    "href": "projects.html",
+    "title": "My Projects",
+    "section": "",
+    "text": "A/B Testing a Call to Action\n\n\n\n\n\n\nCorrine Chen\n\n\nMay 28, 2026\n\n\n\n\n\n\n\n\n\n\n\nAttribution Models: Same Journey, Different Conclusions\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMaxDiff Analysis of MSBA Class Preferences\n\n\n\n\n\n\nCorrine\n\n\nMay 28, 2026\n\n\n\n\n\n\n\n\n\n\n\nPoisson Regression and Maximum Likelihood Estimation\n\n\n\n\n\n\nCorrine Chen\n\n\nMay 28, 2026\n\n\n\n\n\n\n\n\n\n\n\nReplication of Card and Krueger (1994)\n\n\n\n\n\n\nCorrine Chen\n\n\nMay 28, 2026\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "projects/presentation/attribution_models.html#the-problem",
+    "href": "projects/presentation/attribution_models.html#the-problem",
+    "title": "Attribution Models: Same Journey, Different Conclusions",
+    "section": "The Problem",
+    "text": "The Problem\n\n  \n    \n      \n    \n    Facebook Ad\n  \n  →\n  \n    \n      \n    \n    Google Ads\n  \n  →\n  \n    📧\n    Email Click\n  \n  →\n  \n    💰\n    Purchase\n  \n\n\nThe data aren’t good enough to tell us who gets credit.\n\n\nSo we pick a model — and assign credit as close to reality as we can."
+  },
+  {
+    "objectID": "projects/presentation/attribution_models.html#attribution-models",
+    "href": "projects/presentation/attribution_models.html#attribution-models",
+    "title": "Attribution Models: Same Journey, Different Conclusions",
+    "section": "5 Attribution Models",
+    "text": "5 Attribution Models\n\n  \n    First-touch\n    100% to first touch\n  \n  \n    Last-touch\n    100% to last touch\n  \n  \n    Linear\n    Equal split across all\n  \n  \n    Time Decay\n    More credit near conversion\n  \n  \n    U-shape\n    40% · 20% · 40%\n  \n\n\n\n\n\n\n\n\n\n\n\nFacebook credit: 0 → 1,000 depending on model chosen. Same data. Very different story."
+  },
+  {
+    "objectID": "projects/presentation/attribution_models.html#attribution-models-1",
+    "href": "projects/presentation/attribution_models.html#attribution-models-1",
+    "title": "Attribution Models: Same Journey, Different Conclusions",
+    "section": "5 Attribution Models",
+    "text": "5 Attribution Models\n\n  \n    1️⃣\n    First-touch\n    100% to first contact\n  \n  \n    🏁\n    Last-touch\n    100% to last contact\n  \n  \n    ⚖️\n    Linear\n    Equal split across all\n  \n  \n    ⏱️\n    Time Decay\n    More credit near conversion\n  \n  \n    🔱\n    Position-based\n    40% · 20% · 40%\n  \n\n\n\n  \n    First-touch\n    \n    100% · 0% · 0%\n  \n  \n    Last-touch\n    \n    0% · 0% · 100%\n  \n  \n    Linear\n    \n    \n    \n    33% · 33% · 33%\n  \n  \n    Time Decay\n    \n    \n    \n    14% · 29% · 57%\n  \n  \n    Position-based\n    \n    \n    \n    40% · 20% · 40%\n  \n  \n    First touch\n    Middle\n    Last touch"
+  },
+  {
+    "objectID": "projects/presentation/attribution_models.html#the-numbers-can-diverge-drastically",
+    "href": "projects/presentation/attribution_models.html#the-numbers-can-diverge-drastically",
+    "title": "Attribution Models: Same Journey, Different Conclusions",
+    "section": "The Numbers Can Diverge Drastically",
+    "text": "The Numbers Can Diverge Drastically\nImagine 1,000 conversions across Facebook, Google, Email\n\n\n\n\n\n\n\n\n\n\nFacebook credit: 50 → 420 depending on model chosen. Same data. Very different story."
+  },
+  {
+    "objectID": "projects/presentation/attribution_models.html#the-numbers-can-diverge-drastically-1",
+    "href": "projects/presentation/attribution_models.html#the-numbers-can-diverge-drastically-1",
+    "title": "Attribution Models: Same Journey, Different Conclusions",
+    "section": "The Numbers Can Diverge Drastically",
+    "text": "The Numbers Can Diverge Drastically\nImagine 1,000 conversions across Facebook, Google, Email\n\n\n\n\n\n\n\n\n\n\nFacebook credit: 50 → 420 depending on model chosen."
+  },
+  {
+    "objectID": "projects/presentation/attribution_models.html#beware-models-can-mislead",
+    "href": "projects/presentation/attribution_models.html#beware-models-can-mislead",
+    "title": "Attribution Models: Same Journey, Different Conclusions",
+    "section": "Beware: Models Can Mislead",
+    "text": "Beware: Models Can Mislead\n\n  \n    First-touch → Makes the first channel look like a hero.\n    But did it really cause the conversion — or just happen to be first?\n  \n  \n    Last-touch → Makes the last channel look like a hero.\n    But the customer might have already decided to buy before that click.\n  \n  \n    Any model → Can make a channel seem more or less important than it really is.\n    The model doesn't reveal the truth — it just assigns credit."
+  },
+  {
+    "objectID": "projects/presentation/attribution_models.html#so-whats-the-real-solution",
+    "href": "projects/presentation/attribution_models.html#so-whats-the-real-solution",
+    "title": "Attribution Models: Same Journey, Different Conclusions",
+    "section": "So What’s the Real Solution?",
+    "text": "So What’s the Real Solution?\n\nAttribution models are educated guesses.\nWithout better data, you’re just picking a story.\n\n\nThe real answer? A/B Testing.\n\n\nRandomly assign customers to see — or not see — each touchpoint. Only then can you measure the true causal effect of each channel. Without it, you’re choosing a model and hoping for the best."
+  },
+  {
+    "objectID": "projects/presentation/attribution_models.html#how-do-we-know-which-model-is-better",
+    "href": "projects/presentation/attribution_models.html#how-do-we-know-which-model-is-better",
+    "title": "Attribution Models: Same Journey, Different Conclusions",
+    "section": "How Do We Know Which Model Is Better?",
+    "text": "How Do We Know Which Model Is Better?\n\n  \n    💡 Spend Validation\n    \n      \n        ✅ Good Model\n        \n          \n          \n          Spend\n          ── Attribution\n        \n        Spend ↑ → Attribution ↑\n      \n      \n        ❌ Poor Model\n        \n          \n          \n          Spend\n          ── Attribution\n        \n        Spend fluctuates → Attribution flat\n      \n    \n  \n  \n    🧪 Incrementality Testing\n    Randomly withhold a channel from a control group. Measure the conversion difference.\n    A form of A/B testing — the gold standard for measuring true channel impact.\n  \n\n\nBoth methods help us move from assuming to validating."
+  },
+  {
+    "objectID": "projects/presentation/attribution_models.html#takeaway",
+    "href": "projects/presentation/attribution_models.html#takeaway",
+    "title": "Attribution Models: Same Journey, Different Conclusions",
+    "section": "Takeaway",
+    "text": "Takeaway\n\nThe data alone can’t tell us who drove the sale.\nSo we pick a model — and validate it.\n\n\nUse spend validation as a quick sanity check. Use incrementality testing when you need the real answer.\n\n\nAttribution models assign credit. Only experiments can prove it."
+  },
+  {
+    "objectID": "projects/presentation/attribution_models.html#how-do-we-know-which-model-is-better-1",
+    "href": "projects/presentation/attribution_models.html#how-do-we-know-which-model-is-better-1",
+    "title": "Attribution Models: Same Journey, Different Conclusions",
+    "section": "How Do We Know Which Model Is Better?",
+    "text": "How Do We Know Which Model Is Better?\n\n  \n    💡 Spend Validation\n    \n      \n        ✅ Good Model\n        \n          \n          \n          Spend\n          ── Attribution\n        \n        Spend ↑ → Attribution ↑\n      \n      \n        ❌ Poor Model\n        \n          \n          \n          Spend\n          ── Attribution\n        \n        Spend fluctuates → Attribution flat\n      \n    \n  \n  \n    🧪 Incrementality Testing\n    Randomly withhold a channel from a control group. Measure the conversion difference.\n    A form of A/B testing — the gold standard for measuring true channel impact.\n  \n\n\nBoth methods help us move from assuming to validating."
+  }
+]

@@ -17,15 +17,19 @@ execute:
 
 ## The Problem {background-color="#F4F4F4"}
 ```{=html}
-<div style="display:flex; justify-content:center; align-items:flex-start; gap:16px; margin-top:2em;">
+<div style="display:flex; justify-content:center; align-items:flex-start; gap:16px; margin-top:1.5em;">
   <div style="text-align:center;">
-    <div style="width:150px;height:150px;border-radius:50%;background:#1877F2;display:flex;align-items:center;justify-content:center;font-size:3.5em;">📘</div>
+    <div style="width:150px;height:150px;border-radius:50%;background:#1877F2;display:flex;align-items:center;justify-content:center;">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/2023_Facebook_icon.svg" style="width:80px;height:80px;">
+    </div>
     <div style="margin-top:0.8em;font-weight:bold;color:#222;">Facebook Ad</div>
   </div>
   <div style="font-size:2.5em;color:#aaa;margin-top:50px;">→</div>
   <div style="text-align:center;">
-    <div style="width:150px;height:150px;border-radius:50%;background:#EA4335;display:flex;align-items:center;justify-content:center;font-size:3.5em;">🔍</div>
-    <div style="margin-top:0.8em;font-weight:bold;color:#222;">Google Search</div>
+    <div style="width:150px;height:150px;border-radius:50%;background:white;border:3px solid #eee;display:flex;align-items:center;justify-content:center;">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" style="width:100px;height:40px;">
+    </div>
+    <div style="margin-top:0.8em;font-weight:bold;color:#222;">Google Ads</div>
   </div>
   <div style="font-size:2.5em;color:#aaa;margin-top:50px;">→</div>
   <div style="text-align:center;">
@@ -39,12 +43,13 @@ execute:
   </div>
 </div>
 ```
-::: {style="text-align: center; margin-top: 1.5em; font-size: 1.1em; color: #1a3a6b;"}
-Who gets the credit for that conversion?
+
+::: {style="text-align: center; margin-top: 1.2em; font-size: 1.1em; color: #1a3a6b;"}
+**The data aren't good enough to tell us who gets credit.**
 :::
 
-::: {style="text-align: center; margin-top: 0.8em; font-size: 0.9em; color: #444444;"}
-The answer depends entirely on which attribution model you choose.
+::: {style="text-align: center; margin-top: 0.6em; font-size: 0.9em; color: #444444;"}
+So we pick a model — and assign credit as close to reality as we can.
 :::
 
 ---
@@ -53,218 +58,126 @@ The answer depends entirely on which attribution model you choose.
 ## 5 Attribution Models {background-color="#F4F4F4"}
 
 ```{=html}
-<div style="display:flex; justify-content:center; gap:12px; margin-top:1em; flex-wrap:wrap;">
-  <div style="background:#4A90D9;border-radius:12px;padding:16px 12px;width:140px;text-align:center;color:white;">
-    <div style="font-size:1.8em;">1️⃣</div>
-    <div style="font-weight:bold;margin-top:8px;">First-touch</div>
-    <div style="font-size:0.75em;margin-top:6px;opacity:0.9;">100% to first contact</div>
+<div style="display:flex; justify-content:center; gap:10px; margin-top:0.5em;">
+  <div style="background:#9E9E9E;border-radius:12px;padding:12px 10px;width:130px;text-align:center;color:white;">
+    <div style="font-weight:bold;margin-top:6px;font-size:0.95em;">First-touch</div>
+    <div style="font-size:0.7em;margin-top:4px;opacity:0.9;">100% to first touch</div>
   </div>
-  <div style="background:#E07B4F;border-radius:12px;padding:16px 12px;width:140px;text-align:center;color:white;">
-    <div style="font-size:1.8em;">🏁</div>
-    <div style="font-weight:bold;margin-top:8px;">Last-touch</div>
-    <div style="font-size:0.75em;margin-top:6px;opacity:0.9;">100% to last contact</div>
+  <div style="background:#757575;border-radius:12px;padding:12px 10px;width:130px;text-align:center;color:white;">
+    <div style="font-weight:bold;margin-top:6px;font-size:0.95em;">Last-touch</div>
+    <div style="font-size:0.7em;margin-top:4px;opacity:0.9;">100% to last touch</div>
   </div>
-  <div style="background:#5BAD6F;border-radius:12px;padding:16px 12px;width:140px;text-align:center;color:white;">
-    <div style="font-size:1.8em;">⚖️</div>
-    <div style="font-weight:bold;margin-top:8px;">Linear</div>
-    <div style="font-size:0.75em;margin-top:6px;opacity:0.9;">Equal split across all</div>
+  <div style="background:#9E9E9E;border-radius:12px;padding:12px 10px;width:130px;text-align:center;color:white;">
+    <div style="font-weight:bold;margin-top:6px;font-size:0.95em;">Linear</div>
+    <div style="font-size:0.7em;margin-top:4px;opacity:0.9;">Equal split across all</div>
   </div>
-  <div style="background:#9B72B0;border-radius:12px;padding:16px 12px;width:140px;text-align:center;color:white;">
-    <div style="font-size:1.8em;">⏱️</div>
-    <div style="font-weight:bold;margin-top:8px;">Time Decay</div>
-    <div style="font-size:0.75em;margin-top:6px;opacity:0.9;">More credit near conversion</div>
+  <div style="background:#757575;border-radius:12px;padding:12px 10px;width:130px;text-align:center;color:white;">
+    <div style="font-weight:bold;margin-top:6px;font-size:0.95em;">Time Decay</div>
+    <div style="font-size:0.7em;margin-top:4px;opacity:0.9;">More credit near conversion</div>
   </div>
-  <div style="background:#E6A817;border-radius:12px;padding:16px 12px;width:140px;text-align:center;color:white;">
-    <div style="font-size:1.8em;">🔱</div>
-    <div style="font-weight:bold;margin-top:8px;">Position-based</div>
-    <div style="font-size:0.75em;margin-top:6px;opacity:0.9;">40% · 20% · 40%</div>
-  </div>
-</div>
-
-<div style="margin-top:1.2em; font-size:0.85em;">
-  <div style="display:flex;align-items:center;margin-bottom:8px;">
-    <div style="width:130px;font-weight:bold;color:#222;">First-touch</div>
-    <div style="width:280px;height:24px;background:#4A90D9;border-radius:4px;"></div>
-    <div style="margin-left:8px;color:#666;">100% · 0% · 0%</div>
-  </div>
-  <div style="display:flex;align-items:center;margin-bottom:8px;">
-    <div style="width:130px;font-weight:bold;color:#222;">Last-touch</div>
-    <div style="width:280px;height:24px;background:#E07B4F;border-radius:4px;"></div>
-    <div style="margin-left:8px;color:#666;">0% · 0% · 100%</div>
-  </div>
-  <div style="display:flex;align-items:center;margin-bottom:8px;">
-    <div style="width:130px;font-weight:bold;color:#222;">Linear</div>
-    <div style="width:91px;height:24px;background:#5BAD6F;border-radius:4px;"></div>
-    <div style="width:91px;height:24px;background:#5BAD6F;border-radius:4px;margin-left:2px;"></div>
-    <div style="width:91px;height:24px;background:#5BAD6F;border-radius:4px;margin-left:2px;"></div>
-    <div style="margin-left:8px;color:#666;">33% · 33% · 33%</div>
-  </div>
-  <div style="display:flex;align-items:center;margin-bottom:8px;">
-    <div style="width:130px;font-weight:bold;color:#222;">Time Decay</div>
-    <div style="width:40px;height:24px;background:#9B72B0;border-radius:4px;"></div>
-    <div style="width:80px;height:24px;background:#9B72B0;border-radius:4px;margin-left:2px;opacity:0.75;"></div>
-    <div style="width:160px;height:24px;background:#9B72B0;border-radius:4px;margin-left:2px;opacity:0.55;"></div>
-    <div style="margin-left:8px;color:#666;">14% · 29% · 57%</div>
-  </div>
-  <div style="display:flex;align-items:center;margin-bottom:8px;">
-    <div style="width:130px;font-weight:bold;color:#222;">Position-based</div>
-    <div style="width:112px;height:24px;background:#E6A817;border-radius:4px;"></div>
-    <div style="width:56px;height:24px;background:#E6A817;border-radius:4px;margin-left:2px;opacity:0.5;"></div>
-    <div style="width:112px;height:24px;background:#E6A817;border-radius:4px;margin-left:2px;"></div>
-    <div style="margin-left:8px;color:#666;">40% · 20% · 40%</div>
-  </div>
-  <div style="display:flex;margin-left:130px;margin-top:6px;font-size:0.8em;color:#888;">
-    <div style="width:93px;text-align:center;">First touch</div>
-    <div style="width:93px;text-align:center;">Middle</div>
-    <div style="width:93px;text-align:center;">Last touch</div>
+  <div style="background:#9E9E9E;border-radius:12px;padding:12px 10px;width:130px;text-align:center;color:white;">
+    <div style="font-weight:bold;margin-top:6px;font-size:0.95em;">U-shape</div>
+    <div style="font-size:0.7em;margin-top:4px;opacity:0.9;">40% · 20% · 40%</div>
   </div>
 </div>
 ```
-
-::: {style="font-size:0.75em; color:#555555; margin-top:0.8em;"}
-Same customer journey. Five different answers.
-:::
-
----
-
-## Visualizing the Difference {background-color="#F4F4F4"}
-
-*One journey: Facebook → Google → Email → Purchase*
 
 ```{python}
 import matplotlib.pyplot as plt
 import numpy as np
 
 models = ['First-touch', 'Last-touch', 'Linear', 'Time Decay', 'Position-based']
-channels = ['Facebook', 'Google', 'Email']
-
-# Credit allocation per model
-data = {
-    'First-touch':     [1.00, 0.00, 0.00],
-    'Last-touch':      [0.00, 0.00, 1.00],
-    'Linear':          [0.33, 0.33, 0.33],
-    'Time Decay':      [0.14, 0.29, 0.57],
-    'Position-based':  [0.40, 0.20, 0.40],
-}
-
-x = np.arange(len(channels))
-width = 0.15
-colors = ['#4FC3F7', '#81C784', '#FFD54F', '#FF8A65', '#CE93D8']
-
-fig, ax = plt.subplots(figsize=(10, 4.5))
-fig.patch.set_facecolor('#1C2951')
-ax.set_facecolor('#1C2951')
-
-for i, (model, credits) in enumerate(data.items()):
-    offset = (i - 2) * width
-    bars = ax.bar(x + offset, credits, width, label=model, color=colors[i], alpha=0.9)
-
-ax.set_ylabel('Credit Allocated', color='white', fontsize=12)
-ax.set_xticks(x)
-ax.set_xticklabels(channels, color='white', fontsize=13)
-ax.tick_params(colors='white')
-ax.set_ylim(0, 1.1)
-ax.yaxis.set_tick_params(labelcolor='white')
-ax.spines[:].set_color('#555')
-ax.legend(loc='upper right', fontsize=9, framealpha=0.3, labelcolor='white')
-ax.set_title('Credit Allocation by Model — Same Journey', color='white', fontsize=13, pad=12)
-
-plt.tight_layout()
-plt.savefig('attribution_chart.png', dpi=150, bbox_inches='tight', facecolor='#1C2951')
-plt.show()
-```
-
----
-
-## The Numbers Can Diverge Drastically {background-color="#F4F4F4"}
-
-*Imagine 1,000 conversions across Facebook, Google, Email*
-
-```{python}
-import matplotlib.pyplot as plt
-import pandas as pd
-import numpy as np
-
-# Simulated channel-level credit (sum across all journeys)
-models = ['First-touch', 'Last-touch', 'Linear', 'Time Decay', 'Position-based']
-facebook = [420, 50,  280, 160, 370]
-google   = [130, 120, 280, 260, 190]
-email    = [50,  530, 280, 380, 240]
-# remaining goes to "Other"
-other    = [1000-f-g-e for f,g,e in zip(facebook,google,email)]
+facebook = [1000,    0, 333, 160, 400]
+google   = [   0,    0, 333, 260, 200]
+email    = [   0, 1000, 334, 580, 400]
 
 x = np.arange(len(models))
 width = 0.55
-colors_ch = ['#4FC3F7', '#81C784', '#FFD54F', '#CE93D8']
 
-fig, ax = plt.subplots(figsize=(10, 4.5))
-fig.patch.set_facecolor('#1C2951')
-ax.set_facecolor('#1C2951')
+fig, ax = plt.subplots(figsize=(10, 3.2))
+fig.patch.set_facecolor('#E8E8E8')
+ax.set_facecolor('#E8E8E8')
 
-b1 = ax.bar(x, facebook, width, label='Facebook', color=colors_ch[0])
-b2 = ax.bar(x, google,   width, bottom=facebook, label='Google', color=colors_ch[1])
-b3 = ax.bar(x, email,    width, bottom=[f+g for f,g in zip(facebook,google)], label='Email', color=colors_ch[2])
+ax.bar(x, facebook, width, label='Facebook', color='#4A90D9')
+ax.bar(x, google,   width, bottom=facebook, label='Google', color='#5BAD6F')
+ax.bar(x, email,    width, bottom=[f+g for f,g in zip(facebook,google)], label='Email', color='#E6A817')
 
 ax.set_xticks(x)
-ax.set_xticklabels(models, color='white', fontsize=11)
-ax.set_ylabel('Attributed Conversions (out of 1,000)', color='white', fontsize=11)
-ax.tick_params(colors='white')
-ax.yaxis.set_tick_params(labelcolor='white')
-ax.spines[:].set_color('#555')
-ax.legend(loc='upper right', fontsize=10, framealpha=0.3, labelcolor='white')
-ax.set_title('Same 1,000 Conversions — Very Different Channel Credit', color='white', fontsize=13, pad=12)
+ax.set_xticklabels(models, color='#222222', fontsize=11)
+ax.set_ylabel('Attributed Conversions', color='#222222', fontsize=10)
+ax.set_ylim(0, 1100)
+ax.tick_params(colors='#222222')
+ax.yaxis.set_tick_params(labelcolor='#222222')
+ax.spines[:].set_color('#cccccc')
+ax.legend(loc='upper right', fontsize=9, framealpha=0.3, labelcolor='#222222')
 
 plt.tight_layout()
-plt.savefig('channel_chart.png', dpi=150, bbox_inches='tight', facecolor='#1C2951')
+plt.savefig('channel_chart.png', dpi=150, bbox_inches='tight', facecolor='#E8E8E8')
 plt.show()
 ```
 
-::: {style="font-size: 0.75em; color: #1a3a6b; margin-top: 0.5em;"}
-Facebook credit: **50 → 420** depending on model chosen.
+::: {style="font-size:0.8em; color:#1a3a6b; margin-top:0.3em; text-align:center;"}
+Facebook credit: **0 → 1,000** depending on model chosen. Same data. Very different story.
 :::
 
 ---
 
-## Which Model Should You Use? {background-color="#F4F4F4"}
+## How Do We Know Which Model Is Better? {background-color="#E8E8E8"}
 
-::: columns
-::: {.column width="50%"}
-**Business Goal → Model**
+```{=html}
+<div style="margin-top:1.2em; font-size:0.88em;">
+  <div style="background:#e8f0fb;border-left:5px solid #4A90D9;padding:16px 20px;border-radius:6px;margin-bottom:14px;">
+    <strong>💡 Spend Validation</strong>
+    <div style="display:flex; gap:20px; margin-top:0.8em;">
+      <div style="flex:1; background:#f0f7f0; border-radius:10px; padding:12px; border-left:4px solid #5BAD6F;">
+        <div style="font-weight:bold; color:#5BAD6F; margin-bottom:6px;">✅ Good Model</div>
+        <svg viewBox="0 0 200 80" style="width:100%;">
+          <polyline points="10,60 50,40 90,50 130,20 170,30" fill="none" stroke="#4A90D9" stroke-width="2.5"/>
+          <polyline points="10,65 50,45 90,55 130,25 170,35" fill="none" stroke="#E6A817" stroke-width="2.5" stroke-dasharray="4,2"/>
+          <text x="10" y="78" font-size="9" fill="#4A90D9">Spend</text>
+          <text x="60" y="78" font-size="9" fill="#E6A817">── Attribution</text>
+        </svg>
+        <div style="font-size:0.78em; color:#555; margin-top:4px;">Spend ↑ → Attribution ↑</div>
+      </div>
+      <div style="flex:1; background:#fdf2f2; border-radius:10px; padding:12px; border-left:4px solid #E07B4F;">
+        <div style="font-weight:bold; color:#E07B4F; margin-bottom:6px;">❌ Poor Model</div>
+        <svg viewBox="0 0 200 80" style="width:100%;">
+          <polyline points="10,60 50,30 90,50 130,20 170,40" fill="none" stroke="#4A90D9" stroke-width="2.5"/>
+          <polyline points="10,45 50,47 90,44 130,46 170,45" fill="none" stroke="#E6A817" stroke-width="2.5" stroke-dasharray="4,2"/>
+          <text x="10" y="78" font-size="9" fill="#4A90D9">Spend</text>
+          <text x="60" y="78" font-size="9" fill="#E6A817">── Attribution</text>
+        </svg>
+        <div style="font-size:0.78em; color:#555; margin-top:4px;">Spend fluctuates → Attribution flat</div>
+      </div>
+    </div>
+  </div>
+  <div style="background:#e8f4ec;border-left:5px solid #5BAD6F;padding:16px 20px;border-radius:6px;">
+    <strong>🧪 Incrementality Testing</strong><br>
+    <span style="color:#444;">Randomly withhold a channel from a control group. Measure the conversion difference.</span><br>
+    <span style="color:#888;font-size:0.9em;">A form of A/B testing — the gold standard for measuring true channel impact.</span>
+  </div>
+</div>
+```
 
-- 🎯 Brand awareness → **First-touch**
-- 💰 Direct conversion → **Last-touch**
-- ⚖️ Balanced view → **Linear**
-- 🕐 Recency matters → **Time Decay**
-- 🔁 Nurture + close → **Position-based**
+::: {style="text-align:center; font-size:0.8em; color:#888; margin-top:1em;"}
+Both methods help us move from *assuming* to *validating*.
 :::
-
-::: {.column width="50%"}
-**Advanced: Spend-Weighted**
-
-Weight credit not just by position,
-but by **how much was spent**
-at each touchpoint.
-
-::: {style="color: #1a3a6b; font-size: 0.85em; margin-top: 0.8em;"}
-Channels that cost more
-get held to a higher standard.
-:::
-:::
-:::
-
 ---
 
-## Takeaway {background-color="#F4F4F4"}
+## Takeaway {background-color="#E8E8E8"}
 
-::: {style="text-align: center; font-size: 1.3em; margin-top: 1.5em; line-height: 1.6;"}
-Attribution isn't a statistics problem.
+::: {style="text-align: center; font-size: 1.1em; margin-top: 1em; line-height: 1.8; color:#333;"}
+The data alone can't tell us who drove the sale.
 
-It's a **business decision**.
+So we pick a model — and **validate it.**
 :::
 
-::: {style="text-align: center; font-size: 0.95em; color: #1a3a6b; margin-top: 1.5em;"}
-The model you choose determines which channels
-get budget next quarter.
+::: {style="text-align: center; font-size: 0.95em; color: #555555; margin-top: 1em;"}
+Use **spend validation** as a quick sanity check.<br>
+Use **incrementality testing** when you need the real answer.
+:::
 
-Choose deliberately.
+::: {style="text-align: center; font-size: 0.88em; color:#1a3a6b; margin-top:1em; font-weight:bold;"}
+Attribution models assign credit.<br>
+Only experiments can prove it.
 :::
