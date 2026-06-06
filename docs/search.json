@@ -4,7 +4,7 @@
     "href": "projects.html",
     "title": "My Projects",
     "section": "",
-    "text": "A/B Testing a Call to Action\n\n\n\n\n\n\nCorrine Chen\n\n\nMay 28, 2026\n\n\n\n\n\n\n\n\n\n\n\nAttribution Models: Same Journey, Different Conclusions\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMaxDiff Analysis of MSBA Class Preferences\n\n\n\n\n\n\nCorrine\n\n\nMay 28, 2026\n\n\n\n\n\n\n\n\n\n\n\nPoisson Regression and Maximum Likelihood Estimation\n\n\n\n\n\n\nCorrine Chen\n\n\nMay 28, 2026\n\n\n\n\n\n\n\n\n\n\n\nReplication of Card and Krueger (1994)\n\n\n\n\n\n\nCorrine Chen\n\n\nMay 28, 2026\n\n\n\n\n\n\nNo matching items"
+    "text": "A/B Testing a Call to Action\n\n\n\n\n\n\nCorrine Chen\n\n\nJun 5, 2026\n\n\n\n\n\n\n\n\n\n\n\nAttribution Models: Same Journey, Different Conclusions\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMaxDiff Analysis of MSBA Class Preferences\n\n\n\n\n\n\nCorrine\n\n\nJun 5, 2026\n\n\n\n\n\n\n\n\n\n\n\nPoisson Regression and Maximum Likelihood Estimation\n\n\n\n\n\n\nCorrine Chen\n\n\nJun 5, 2026\n\n\n\n\n\n\n\n\n\n\n\nReplication of Card and Krueger (1994)\n\n\n\n\n\n\nCorrine Chen\n\n\nJun 5, 2026\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "projects/presentation/attribution_models.html#the-problem",
@@ -75,5 +75,33 @@
     "title": "Attribution Models: Same Journey, Different Conclusions",
     "section": "How Do We Know Which Model Is Better?",
     "text": "How Do We Know Which Model Is Better?\n\n  \n    💡 Spend Validation\n    \n      \n        ✅ Good Model\n        \n          \n          \n          Spend\n          ── Attribution\n        \n        Spend ↑ → Attribution ↑\n      \n      \n        ❌ Poor Model\n        \n          \n          \n          Spend\n          ── Attribution\n        \n        Spend fluctuates → Attribution flat\n      \n    \n  \n  \n    🧪 Incrementality Testing\n    Randomly withhold a channel from a control group. Measure the conversion difference.\n    A form of A/B testing — the gold standard for measuring true channel impact.\n  \n\n\nBoth methods help us move from assuming to validating."
+  },
+  {
+    "objectID": "projects/presentation/Chen_Corrine-attribution-modeling.html#the-problem",
+    "href": "projects/presentation/Chen_Corrine-attribution-modeling.html#the-problem",
+    "title": "Attribution Models: Same Journey, Different Conclusions",
+    "section": "The Problem",
+    "text": "The Problem\n\n  \n    \n      \n    \n    Facebook Ad\n  \n  →\n  \n    \n      \n    \n    Google Ads\n  \n  →\n  \n    📧\n    Email Click\n  \n  →\n  \n    💰\n    Purchase\n  \n\n\nThe data aren’t good enough to tell us who gets credit.\n\n\nSo we pick a model — and assign credit as close to reality as we can."
+  },
+  {
+    "objectID": "projects/presentation/Chen_Corrine-attribution-modeling.html#attribution-models",
+    "href": "projects/presentation/Chen_Corrine-attribution-modeling.html#attribution-models",
+    "title": "Attribution Models: Same Journey, Different Conclusions",
+    "section": "5 Attribution Models",
+    "text": "5 Attribution Models\n\n  \n    First-touch\n    100% to first touch\n  \n  \n    Last-touch\n    100% to last touch\n  \n  \n    Linear\n    Equal split across all\n  \n  \n    Time Decay\n    More credit near conversion\n  \n  \n    U-shape\n    40% · 20% · 40%\n  \n\n\n\n\n\n\n\n\n\n\n\nFacebook credit: 0 → 1,000 depending on model chosen. Same data. Very different story."
+  },
+  {
+    "objectID": "projects/presentation/Chen_Corrine-attribution-modeling.html#how-do-we-know-which-model-is-better",
+    "href": "projects/presentation/Chen_Corrine-attribution-modeling.html#how-do-we-know-which-model-is-better",
+    "title": "Attribution Models: Same Journey, Different Conclusions",
+    "section": "How Do We Know Which Model Is Better?",
+    "text": "How Do We Know Which Model Is Better?\n\n  \n    💡 Spend Validation\n    \n      \n        ✅ Good Model\n        \n          \n          \n          Spend\n          ── Attribution\n        \n        Spend ↑ → Attribution ↑\n      \n      \n        ❌ Poor Model\n        \n          \n          \n          Spend\n          ── Attribution\n        \n        Spend fluctuates → Attribution flat\n      \n    \n  \n  \n    🧪 Incrementality Testing\n    Randomly withhold a channel from a control group. Measure the conversion difference.\n    A form of A/B testing — the gold standard for measuring true channel impact.\n  \n\n\nBoth methods help us move from assuming to validating."
+  },
+  {
+    "objectID": "projects/presentation/Chen_Corrine-attribution-modeling.html#takeaway",
+    "href": "projects/presentation/Chen_Corrine-attribution-modeling.html#takeaway",
+    "title": "Attribution Models: Same Journey, Different Conclusions",
+    "section": "Takeaway",
+    "text": "Takeaway\n\nThe data alone can’t tell us who drove the sale.\nSo we pick a model — and validate it.\n\n\nUse spend validation as a quick sanity check. Use incrementality testing when you need the real answer.\n\n\nAttribution models assign credit. Only experiments can prove it."
   }
 ]

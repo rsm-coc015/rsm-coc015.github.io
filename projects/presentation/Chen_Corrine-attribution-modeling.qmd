@@ -8,6 +8,7 @@ format:
     slide-number: true
     fontsize: 1.8em
     margin: 0.08
+    embed-resources: true
 execute:
   echo: false
   warning: false
