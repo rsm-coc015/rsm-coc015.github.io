@@ -200,7 +200,6 @@ window.Quarto = {
   <li><a href="#random-forest-mean-decrease-in-gini-impurity" id="toc-random-forest-mean-decrease-in-gini-impurity" class="nav-link" data-scroll-target="#random-forest-mean-decrease-in-gini-impurity">6. Random forest: mean decrease in Gini (impurity)</a></li>
   <li><a href="#shapley-values-for-a-logistic-regression-pseudo-r²-as-fit-metric" id="toc-shapley-values-for-a-logistic-regression-pseudo-r²-as-fit-metric" class="nav-link" data-scroll-target="#shapley-values-for-a-logistic-regression-pseudo-r²-as-fit-metric">Shapley values for a logistic regression (pseudo-R² as fit metric)</a></li>
   <li><a href="#summary-table" id="toc-summary-table" class="nav-link" data-scroll-target="#summary-table">Summary table</a></li>
-  <li><a href="#summary-table-1" id="toc-summary-table-1" class="nav-link" data-scroll-target="#summary-table-1">Summary table</a></li>
   <li><a href="#visualization" id="toc-visualization" class="nav-link" data-scroll-target="#visualization">Visualization</a></li>
   <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion">Discussion</a></li>
   </ul>
@@ -252,7 +251,7 @@ window.Quarto = {
 <li><strong>Johnson’s relative weight</strong></li>
 <li><strong>Random forest mean decrease in Gini (impurity)</strong></li>
 </ul>
-<div id="eb9282b1" class="cell" data-execution_count="1">
+<div id="8a7c1e15" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
@@ -271,10 +270,10 @@ window.Quarto = {
 </section>
 <section id="pearson-correlations" class="level2">
 <h2 class="anchored" data-anchor-id="pearson-correlations">1. Pearson correlations</h2>
-<div id="8379bc29" class="cell" data-execution_count="2">
+<div id="6a2184a0" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pearson <span class="op">=</span> X.<span class="bu">apply</span>(<span class="kw">lambda</span> col: col.corr(y))</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>pearson</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="13">
+<div class="cell-output cell-output-display" data-execution_count="24">
 <pre><code>trust        0.255706
 build        0.191896
 differs      0.184801
@@ -290,14 +289,14 @@ dtype: float64</code></pre>
 </section>
 <section id="standardized-regression-coefficients" class="level2">
 <h2 class="anchored" data-anchor-id="standardized-regression-coefficients">2. Standardized regression coefficients</h2>
-<div id="37d747d6" class="cell" data-execution_count="3">
+<div id="17213a55" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Xs <span class="op">=</span> (X <span class="op">-</span> X.mean()) <span class="op">/</span> X.std()</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>ys <span class="op">=</span> (y <span class="op">-</span> y.mean()) <span class="op">/</span> y.std()</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>lr <span class="op">=</span> LinearRegression().fit(Xs, ys)</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>std_coef <span class="op">=</span> pd.Series(lr.coef_, index<span class="op">=</span>predictors)</span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>std_coef</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="14">
+<div class="cell-output cell-output-display" data-execution_count="25">
 <pre><code>trust        0.115752
 build        0.019979
 differs      0.027847
@@ -314,7 +313,7 @@ dtype: float64</code></pre>
 <section id="drop-one" class="level2">
 <h2 class="anchored" data-anchor-id="drop-one">3. Drop-one</h2>
 <p>The usefulness of a predictor is the decrease in R² when that predictor is removed from the full model.</p>
-<div id="59b71a87" class="cell" data-execution_count="4">
+<div id="d4d0b1f6" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>lr_full <span class="op">=</span> LinearRegression().fit(X, y)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>r2_full <span class="op">=</span> lr_full.score(X, y)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -330,7 +329,7 @@ dtype: float64</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Full model R^2 = 0.1090</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="15">
+<div class="cell-output cell-output-display" data-execution_count="26">
 <pre><code>trust        0.008243
 build        0.000266
 differs      0.000550
@@ -347,7 +346,7 @@ dtype: float64</code></pre>
 <section id="shapley-values-linear-regression-r²-as-fit-metric" class="level2">
 <h2 class="anchored" data-anchor-id="shapley-values-linear-regression-r²-as-fit-metric">4. Shapley values (linear regression, R² as fit metric)</h2>
 <p>For each predictor, we average its marginal contribution to R² across all possible orderings of the other predictors (the exact Shapley value formula).</p>
-<div id="ee51ad11" class="cell" data-execution_count="5">
+<div id="a0dffcf0" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> r2_for_subset(subset):</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(subset) <span class="op">==</span> <span class="dv">0</span>:</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="fl">0.0</span></span>
@@ -371,7 +370,7 @@ dtype: float64</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Sum of Shapley values = 0.1090  (should equal R^2 = 0.1090)</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="16">
+<div class="cell-output cell-output-display" data-execution_count="27">
 <pre><code>trust        0.021611
 build        0.007191
 differs      0.007291
@@ -388,7 +387,7 @@ dtype: float64</code></pre>
 <section id="johnsons-epsilon-relative-weights" class="level2">
 <h2 class="anchored" data-anchor-id="johnsons-epsilon-relative-weights">5. Johnson’s epsilon (relative weights)</h2>
 <p>Johnson’s relative weights decompose R² using an orthogonal transformation of the predictors (via eigen-decomposition of the correlation matrix), so that each predictor’s “epsilon” weight is non-negative and the weights sum to the model’s R².</p>
-<div id="7f716ba2" class="cell" data-execution_count="6">
+<div id="d8c3ea9f" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>Xs <span class="op">=</span> (X <span class="op">-</span> X.mean()) <span class="op">/</span> X.std()</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>ys <span class="op">=</span> (y <span class="op">-</span> y.mean()) <span class="op">/</span> y.std()</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -414,7 +413,7 @@ dtype: float64</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Sum of Johnson's weights = 0.1090  (should equal R^2 = 0.1090)</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="17">
+<div class="cell-output cell-output-display" data-execution_count="28">
 <pre><code>trust        0.021623
 build        0.007217
 differs      0.007594
@@ -430,12 +429,12 @@ dtype: float64</code></pre>
 </section>
 <section id="random-forest-mean-decrease-in-gini-impurity" class="level2">
 <h2 class="anchored" data-anchor-id="random-forest-mean-decrease-in-gini-impurity">6. Random forest: mean decrease in Gini (impurity)</h2>
-<div id="97935694" class="cell" data-execution_count="7">
+<div id="40f55b3b" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>rf <span class="op">=</span> RandomForestRegressor(n_estimators<span class="op">=</span><span class="dv">500</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>rf.fit(X, y)</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>rf_gini <span class="op">=</span> pd.Series(rf.feature_importances_, index<span class="op">=</span>predictors)</span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>rf_gini</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="18">
+<div class="cell-output cell-output-display" data-execution_count="29">
 <pre><code>trust        0.152313
 build        0.099703
 differs      0.089597
@@ -456,7 +455,7 @@ dtype: float64</code></pre>
 \text{pseudo-}R^2 = 1 - \frac{LL(\text{model})}{LL(\text{null})}
 \]</span></p>
 <p>where <span class="math inline">\(LL(\text{null})\)</span> is the log-likelihood of an intercept-only model. The same exact Shapley formula (averaging marginal pseudo-R² contributions over all <span class="math inline">\(2^{k-1}\)</span> subsets of the remaining predictors, weighted by subset size) is then applied. Log-likelihoods for repeated subsets are cached to keep the <span class="math inline">\(2^9 = 512\)</span> model fits tractable.</p>
-<div id="a06b846b" class="cell" data-execution_count="8">
+<div id="4fab94bd" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>y_bin <span class="op">=</span> (df[<span class="st">"satisfaction"</span>] <span class="op">&gt;=</span> <span class="dv">4</span>).astype(<span class="bu">int</span>)</span>
@@ -508,7 +507,7 @@ dtype: float64</code></pre>
 <pre><code>Full model McFadden pseudo-R^2 = 0.0770
 Sum of logit Shapley values = 0.0770  (should equal pseudo-R^2 = 0.0770)</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="19">
+<div class="cell-output cell-output-display" data-execution_count="30">
 <pre><code>trust        0.012215
 build        0.005733
 differs      0.007306
@@ -521,9 +520,9 @@ impact       0.018987
 dtype: float64</code></pre>
 </div>
 </div>
-<div id="3319461d" class="cell" data-execution_count="9">
+<div id="42875f54" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>(shapley_logit <span class="op">/</span> shapley_logit.<span class="bu">sum</span>() <span class="op">*</span> <span class="dv">100</span>).<span class="bu">round</span>(<span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="20">
+<div class="cell-output cell-output-display" data-execution_count="31">
 <pre><code>trust        15.9
 build         7.4
 differs       9.5
@@ -540,11 +539,8 @@ dtype: float64</code></pre>
 </section>
 <section id="summary-table" class="level2">
 <h2 class="anchored" data-anchor-id="summary-table">Summary table</h2>
-</section>
-<section id="summary-table-1" class="level2">
-<h2 class="anchored" data-anchor-id="summary-table-1">Summary table</h2>
 <p>Following the format of slide 75, every column is expressed as each predictor’s <strong>share of the total (%)</strong>: take the absolute value of each measure and divide by the column sum. The “Usefulness” (drop-one) column is included as an extra measure per the assignment instructions. We validated this percentage formula against the slide 75 example (the “Credit Card Example”): applying the same abs-and-normalize transformation to that example’s raw values reproduces its published percentages almost exactly, confirming this is the correct way to convert each raw measure into the table format shown in the slides.</p>
-<div id="046249da" class="cell" data-execution_count="10">
+<div id="26a3e2e6" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>table <span class="op">=</span> pd.DataFrame({</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Pearson Correlations"</span>: pearson,</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Standardized Coefficients"</span>: std_coef,</span>
@@ -558,7 +554,7 @@ dtype: float64</code></pre>
 <span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>table_pct <span class="op">=</span> table_pct <span class="op">/</span> table_pct.<span class="bu">sum</span>() <span class="op">*</span> <span class="dv">100</span></span>
 <span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>table_pct.<span class="bu">round</span>(<span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="21">
+<div class="cell-output cell-output-display" data-execution_count="32">
 <div>
 
 
@@ -665,7 +661,7 @@ dtype: float64</code></pre>
 </section>
 <section id="visualization" class="level2">
 <h2 class="anchored" data-anchor-id="visualization">Visualization</h2>
-<div id="eb578593" class="cell" data-execution_count="11">
+<div id="e5f8a7f4" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>

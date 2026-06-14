@@ -165,7 +165,7 @@
     "href": "projects/project5/index.html#summary-table",
     "title": "Key Drivers Analysis",
     "section": "Summary table",
-    "text": "Summary table"
+    "text": "Summary table\nFollowing the format of slide 75, every column is expressed as each predictor’s share of the total (%): take the absolute value of each measure and divide by the column sum. The “Usefulness” (drop-one) column is included as an extra measure per the assignment instructions. We validated this percentage formula against the slide 75 example (the “Credit Card Example”): applying the same abs-and-normalize transformation to that example’s raw values reproduces its published percentages almost exactly, confirming this is the correct way to convert each raw measure into the table format shown in the slides.\n\ntable = pd.DataFrame({\n    \"Pearson Correlations\": pearson,\n    \"Standardized Coefficients\": std_coef,\n    \"Usefulness\": usefulness,\n    \"Shapley Values\": shapley,\n    \"Johnson's Epsilon\": johnson,\n    \"RF Gini Importance\": rf_gini,\n})\n\ntable_pct = table.abs()\ntable_pct = table_pct / table_pct.sum() * 100\n\ntable_pct.round(1)\n\n\n\n\n\n\n\n\nPearson Correlations\nStandardized Coefficients\nUsefulness\nShapley Values\nJohnson's Epsilon\nRF Gini Importance\n\n\n\n\ntrust\n13.3\n25.3\n31.5\n19.8\n19.8\n15.2\n\n\nbuild\n10.0\n4.4\n1.0\n6.6\n6.6\n10.0\n\n\ndiffers\n9.6\n6.1\n2.1\n6.7\n7.0\n9.0\n\n\neasy\n11.1\n4.8\n1.1\n8.5\n8.2\n9.7\n\n\nappealing\n10.8\n7.4\n2.7\n8.4\n8.3\n8.5\n\n\nrewarding\n10.1\n1.1\n0.1\n6.3\n6.0\n10.5\n\n\npopular\n8.9\n3.6\n0.8\n5.2\n5.4\n9.5\n\n\nservice\n13.0\n19.3\n17.9\n16.9\n16.6\n13.6\n\n\nimpact\n13.2\n28.0\n42.8\n21.6\n22.0\n14.0"
   },
   {
     "objectID": "projects/project5/index.html#discussion",

@@ -228,7 +228,6 @@ of satisfaction are robust to whether satisfaction is modeled as a
 continuous outcome (linear regression, R²) or as a binary high/low outcome
 (logistic regression, pseudo-R²).
 
-## Summary table
 
 ## Summary table
 
