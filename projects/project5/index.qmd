@@ -58,7 +58,7 @@ std_coef = pd.Series(lr.coef_, index=predictors)
 std_coef
 ```
 
-## 3. Drop-one ("usefulness")
+## 3. Drop-one
 
 The usefulness of a predictor is the decrease in R² when that predictor is
 removed from the full model.
@@ -147,6 +147,88 @@ rf.fit(X, y)
 rf_gini = pd.Series(rf.feature_importances_, index=predictors)
 rf_gini
 ```
+
+## Shapley values for a logistic regression (pseudo-R² as fit metric)
+
+As a harder-challenge extension, we implement Shapley values for a
+**generalized linear model (logistic regression)**, using **McFadden's
+pseudo-R²** as the fit metric instead of OLS R². The outcome is recoded as
+a binary indicator of high satisfaction (`satisfaction >= 4`), and for each
+candidate subset of predictors we fit a logistic regression and compute
+
+$$
+\text{pseudo-}R^2 = 1 - \frac{LL(\text{model})}{LL(\text{null})}
+$$
+
+where $LL(\text{null})$ is the log-likelihood of an intercept-only model.
+The same exact Shapley formula (averaging marginal pseudo-R² contributions
+over all $2^{k-1}$ subsets of the remaining predictors, weighted by subset
+size) is then applied. Log-likelihoods for repeated subsets are cached to
+keep the $2^9 = 512$ model fits tractable.
+
+```{python}
+from sklearn.linear_model import LogisticRegression
+
+y_bin = (df["satisfaction"] >= 4).astype(int)
+
+cache = {}
+def log_likelihood(subset):
+    if subset in cache:
+        return cache[subset]
+    if len(subset) == 0:
+        p = y_bin.mean()
+        ll = np.sum(y_bin * np.log(p) + (1 - y_bin) * np.log(1 - p))
+    else:
+        model = LogisticRegression(max_iter=1000)
+        model.fit(X[list(subset)], y_bin)
+        probs = model.predict_proba(X[list(subset)])[:, 1]
+        eps = 1e-10
+        probs = np.clip(probs, eps, 1 - eps)
+        ll = np.sum(y_bin * np.log(probs) + (1 - y_bin) * np.log(1 - probs))
+    cache[subset] = ll
+    return ll
+
+ll_null = log_likelihood(())
+
+def pseudo_r2_for_subset(subset):
+    if len(subset) == 0:
+        return 0.0
+    ll = log_likelihood(tuple(sorted(subset)))
+    return 1 - ll / ll_null
+
+r2_full_logit = pseudo_r2_for_subset(tuple(predictors))
+
+shapley_logit = {p: 0.0 for p in predictors}
+for p in predictors:
+    others = [x for x in predictors if x != p]
+    total = 0.0
+    for size in range(0, len(others) + 1):
+        for subset in combinations(others, size):
+            r2_with = pseudo_r2_for_subset(subset + (p,))
+            r2_without = pseudo_r2_for_subset(subset)
+            weight = (math.factorial(size) * math.factorial(k - size - 1)) / math.factorial(k)
+            total += weight * (r2_with - r2_without)
+    shapley_logit[p] = total
+
+shapley_logit = pd.Series(shapley_logit)
+print(f"Full model McFadden pseudo-R^2 = {r2_full_logit:.4f}")
+print(f"Sum of logit Shapley values = {shapley_logit.sum():.4f}  (should equal pseudo-R^2 = {r2_full_logit:.4f})")
+shapley_logit
+```
+
+```{python}
+(shapley_logit / shapley_logit.sum() * 100).round(1)
+```
+
+The ranking of predictors by their Shapley contribution to McFadden's
+pseudo-R² is very similar to the OLS-based Shapley ranking: `impact`,
+`trust`, and `service` remain the top three drivers, while `popular` and
+`rewarding` remain the smallest contributors. This suggests the key drivers
+of satisfaction are robust to whether satisfaction is modeled as a
+continuous outcome (linear regression, R²) or as a binary high/low outcome
+(logistic regression, pseudo-R²).
+
+## Summary table
 
 ## Summary table
 
