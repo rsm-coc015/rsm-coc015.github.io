@@ -4,7 +4,7 @@
     "href": "projects.html",
     "title": "My Projects",
     "section": "",
-    "text": "A/B Testing a Call to Action\n\n\n\n\n\n\nCorrine Chen\n\n\nJun 5, 2026\n\n\n\n\n\n\n\n\n\n\n\nAttribution Models: Same Journey, Different Conclusions\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMaxDiff Analysis of MSBA Class Preferences\n\n\n\n\n\n\nCorrine\n\n\nJun 5, 2026\n\n\n\n\n\n\n\n\n\n\n\nPoisson Regression and Maximum Likelihood Estimation\n\n\n\n\n\n\nCorrine Chen\n\n\nJun 5, 2026\n\n\n\n\n\n\n\n\n\n\n\nReplication of Card and Krueger (1994)\n\n\n\n\n\n\nCorrine Chen\n\n\nJun 5, 2026\n\n\n\n\n\n\nNo matching items"
+    "text": "A/B Testing a Call to Action\n\n\n\n\n\n\nCorrine Chen\n\n\nJun 13, 2026\n\n\n\n\n\n\n\n\n\n\n\nAttribution Models: Same Journey, Different Conclusions\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nKey Drivers Analysis\n\n\n\n\n\n\nYour Name\n\n\nJun 13, 2026\n\n\n\n\n\n\n\n\n\n\n\nMaxDiff Analysis of MSBA Class Preferences\n\n\n\n\n\n\nCorrine\n\n\nJun 13, 2026\n\n\n\n\n\n\n\n\n\n\n\nPoisson Regression and Maximum Likelihood Estimation\n\n\n\n\n\n\nCorrine Chen\n\n\nJun 13, 2026\n\n\n\n\n\n\n\n\n\n\n\nReplication of Card and Krueger (1994)\n\n\n\n\n\n\nCorrine Chen\n\n\nJun 13, 2026\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "projects/presentation/attribution_models.html#the-problem",
@@ -103,5 +103,75 @@
     "title": "Attribution Models: Same Journey, Different Conclusions",
     "section": "Takeaway",
     "text": "Takeaway\n\nThe data alone can’t tell us who drove the sale.\nSo we pick a model — and validate it.\n\n\nUse spend validation as a quick sanity check. Use incrementality testing when you need the real answer.\n\n\nAttribution models assign credit. Only experiments can prove it."
+  },
+  {
+    "objectID": "projects/project5/index.html",
+    "href": "projects/project5/index.html",
+    "title": "Key Drivers Analysis",
+    "section": "",
+    "text": "This analysis replicates the variable importance table from the key drivers slides. The outcome variable is overall satisfaction, and the predictors are 10 binary perception variables (trust, build, differs, easy, appealing, rewarding, popular, service, impact).\nFor each predictor, we compute six measures of importance:\n\nPearson correlation with the outcome\nStandardized regression coefficient from a linear regression\n“Usefulness” (drop-one): the drop in R² when the variable is removed\nShapley value for a linear regression (R² as the fit metric)\nJohnson’s relative weight\nRandom forest mean decrease in Gini (impurity)\n\n\nimport pandas as pd\nimport numpy as np\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.ensemble import RandomForestRegressor\nfrom itertools import combinations\nimport math\n\ndf = pd.read_csv(\"data_for_drivers_analysis.csv\")\ny = df[\"satisfaction\"]\nX = df[[\"trust\", \"build\", \"differs\", \"easy\", \"appealing\",\n        \"rewarding\", \"popular\", \"service\", \"impact\"]]\n\npredictors = X.columns.tolist()\nk = len(predictors)"
+  },
+  {
+    "objectID": "projects/project5/index.html#introduction",
+    "href": "projects/project5/index.html#introduction",
+    "title": "Key Drivers Analysis",
+    "section": "",
+    "text": "This analysis replicates the variable importance table from the key drivers slides. The outcome variable is overall satisfaction, and the predictors are 10 binary perception variables (trust, build, differs, easy, appealing, rewarding, popular, service, impact).\nFor each predictor, we compute six measures of importance:\n\nPearson correlation with the outcome\nStandardized regression coefficient from a linear regression\n“Usefulness” (drop-one): the drop in R² when the variable is removed\nShapley value for a linear regression (R² as the fit metric)\nJohnson’s relative weight\nRandom forest mean decrease in Gini (impurity)\n\n\nimport pandas as pd\nimport numpy as np\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.ensemble import RandomForestRegressor\nfrom itertools import combinations\nimport math\n\ndf = pd.read_csv(\"data_for_drivers_analysis.csv\")\ny = df[\"satisfaction\"]\nX = df[[\"trust\", \"build\", \"differs\", \"easy\", \"appealing\",\n        \"rewarding\", \"popular\", \"service\", \"impact\"]]\n\npredictors = X.columns.tolist()\nk = len(predictors)"
+  },
+  {
+    "objectID": "projects/project5/index.html#pearson-correlations",
+    "href": "projects/project5/index.html#pearson-correlations",
+    "title": "Key Drivers Analysis",
+    "section": "1. Pearson correlations",
+    "text": "1. Pearson correlations\n\npearson = X.apply(lambda col: col.corr(y))\npearson\n\ntrust        0.255706\nbuild        0.191896\ndiffers      0.184801\neasy         0.212985\nappealing    0.207997\nrewarding    0.194561\npopular      0.171425\nservice      0.251098\nimpact       0.254539\ndtype: float64"
+  },
+  {
+    "objectID": "projects/project5/index.html#standardized-regression-coefficients",
+    "href": "projects/project5/index.html#standardized-regression-coefficients",
+    "title": "Key Drivers Analysis",
+    "section": "2. Standardized regression coefficients",
+    "text": "2. Standardized regression coefficients\n\nXs = (X - X.mean()) / X.std()\nys = (y - y.mean()) / y.std()\n\nlr = LinearRegression().fit(Xs, ys)\nstd_coef = pd.Series(lr.coef_, index=predictors)\nstd_coef\n\ntrust        0.115752\nbuild        0.019979\ndiffers      0.027847\neasy         0.021970\nappealing    0.033835\nrewarding    0.005067\npopular      0.016616\nservice      0.088390\nimpact       0.128422\ndtype: float64"
+  },
+  {
+    "objectID": "projects/project5/index.html#drop-one-usefulness",
+    "href": "projects/project5/index.html#drop-one-usefulness",
+    "title": "Key Drivers Analysis",
+    "section": "3. Drop-one (“usefulness”)",
+    "text": "3. Drop-one (“usefulness”)\nThe usefulness of a predictor is the decrease in R² when that predictor is removed from the full model.\n\nlr_full = LinearRegression().fit(X, y)\nr2_full = lr_full.score(X, y)\n\nusefulness = {}\nfor p in predictors:\n    cols = [c for c in predictors if c != p]\n    r2_minus = LinearRegression().fit(X[cols], y).score(X[cols], y)\n    usefulness[p] = r2_full - r2_minus\n\nusefulness = pd.Series(usefulness)\nprint(f\"Full model R^2 = {r2_full:.4f}\")\nusefulness\n\nFull model R^2 = 0.1090\n\n\ntrust        0.008243\nbuild        0.000266\ndiffers      0.000550\neasy         0.000289\nappealing    0.000710\nrewarding    0.000016\npopular      0.000204\nservice      0.004674\nimpact       0.011203\ndtype: float64"
+  },
+  {
+    "objectID": "projects/project5/index.html#shapley-values-linear-regression-r²-as-fit-metric",
+    "href": "projects/project5/index.html#shapley-values-linear-regression-r²-as-fit-metric",
+    "title": "Key Drivers Analysis",
+    "section": "4. Shapley values (linear regression, R² as fit metric)",
+    "text": "4. Shapley values (linear regression, R² as fit metric)\nFor each predictor, we average its marginal contribution to R² across all possible orderings of the other predictors (the exact Shapley value formula).\n\ndef r2_for_subset(subset):\n    if len(subset) == 0:\n        return 0.0\n    return LinearRegression().fit(X[list(subset)], y).score(X[list(subset)], y)\n\nshapley = {p: 0.0 for p in predictors}\nfor p in predictors:\n    others = [x for x in predictors if x != p]\n    total = 0.0\n    for size in range(0, len(others) + 1):\n        for subset in combinations(others, size):\n            r2_with = r2_for_subset(subset + (p,))\n            r2_without = r2_for_subset(subset)\n            weight = (math.factorial(size) * math.factorial(k - size - 1)) / math.factorial(k)\n            total += weight * (r2_with - r2_without)\n    shapley[p] = total\n\nshapley = pd.Series(shapley)\nprint(f\"Sum of Shapley values = {shapley.sum():.4f}  (should equal R^2 = {r2_full:.4f})\")\nshapley\n\nSum of Shapley values = 0.1090  (should equal R^2 = 0.1090)\n\n\ntrust        0.021611\nbuild        0.007191\ndiffers      0.007291\neasy         0.009288\nappealing    0.009161\nrewarding    0.006840\npopular      0.005642\nservice      0.018405\nimpact       0.023582\ndtype: float64"
+  },
+  {
+    "objectID": "projects/project5/index.html#johnsons-epsilon-relative-weights",
+    "href": "projects/project5/index.html#johnsons-epsilon-relative-weights",
+    "title": "Key Drivers Analysis",
+    "section": "5. Johnson’s epsilon (relative weights)",
+    "text": "5. Johnson’s epsilon (relative weights)\nJohnson’s relative weights decompose R² using an orthogonal transformation of the predictors (via eigen-decomposition of the correlation matrix), so that each predictor’s “epsilon” weight is non-negative and the weights sum to the model’s R².\n\nXs = (X - X.mean()) / X.std()\nys = (y - y.mean()) / y.std()\n\ncorr_X = Xs.corr().values\neigvals, eigvecs = np.linalg.eigh(corr_X)\n\n# Lambda: square-root factor such that Lambda @ Lambda.T = corr_X\nLambda = eigvecs @ np.diag(np.sqrt(eigvals)) @ eigvecs.T\nLambda_inv = np.linalg.inv(Lambda)\n\n# orthogonal predictors: Z = Xs @ Lambda_inv  (so Z'Z/n = I)\nZ = Xs.values @ Lambda_inv\n\n# regression coefficients of ys on the orthogonal variables Z\nbeta_s = np.linalg.lstsq(Z, ys.values, rcond=None)[0]\n\n# epsilon weights\njohnson = (Lambda**2) @ (beta_s**2)\njohnson = pd.Series(johnson, index=predictors)\n\nprint(f\"Sum of Johnson's weights = {johnson.sum():.4f}  (should equal R^2 = {r2_full:.4f})\")\njohnson\n\nSum of Johnson's weights = 0.1090  (should equal R^2 = 0.1090)\n\n\ntrust        0.021623\nbuild        0.007217\ndiffers      0.007594\neasy         0.008982\nappealing    0.009099\nrewarding    0.006538\npopular      0.005878\nservice      0.018134\nimpact       0.023946\ndtype: float64"
+  },
+  {
+    "objectID": "projects/project5/index.html#random-forest-mean-decrease-in-gini-impurity",
+    "href": "projects/project5/index.html#random-forest-mean-decrease-in-gini-impurity",
+    "title": "Key Drivers Analysis",
+    "section": "6. Random forest: mean decrease in Gini (impurity)",
+    "text": "6. Random forest: mean decrease in Gini (impurity)\n\nrf = RandomForestRegressor(n_estimators=500, random_state=42)\nrf.fit(X, y)\nrf_gini = pd.Series(rf.feature_importances_, index=predictors)\nrf_gini\n\ntrust        0.152313\nbuild        0.099703\ndiffers      0.089597\neasy         0.097260\nappealing    0.084708\nrewarding    0.105451\npopular      0.095315\nservice      0.136098\nimpact       0.139554\ndtype: float64"
+  },
+  {
+    "objectID": "projects/project5/index.html#summary-table",
+    "href": "projects/project5/index.html#summary-table",
+    "title": "Key Drivers Analysis",
+    "section": "Summary table",
+    "text": "Summary table\nFollowing the format of slide 75, every column is expressed as each predictor’s share of the total (%): take the absolute value of each measure and divide by the column sum. The “Usefulness” (drop-one) column is included as an extra measure per the assignment instructions.\n\ntable = pd.DataFrame({\n    \"Pearson Correlations\": pearson,\n    \"Standardized Coefficients\": std_coef,\n    \"Usefulness\": usefulness,\n    \"Shapley Values\": shapley,\n    \"Johnson's Epsilon\": johnson,\n    \"RF Gini Importance\": rf_gini,\n})\n\ntable_pct = table.abs()\ntable_pct = table_pct / table_pct.sum() * 100\n\ntable_pct.round(1)\n\n\n\n\n\n\n\n\nPearson Correlations\nStandardized Coefficients\nUsefulness\nShapley Values\nJohnson's Epsilon\nRF Gini Importance\n\n\n\n\ntrust\n13.3\n25.3\n31.5\n19.8\n19.8\n15.2\n\n\nbuild\n10.0\n4.4\n1.0\n6.6\n6.6\n10.0\n\n\ndiffers\n9.6\n6.1\n2.1\n6.7\n7.0\n9.0\n\n\neasy\n11.1\n4.8\n1.1\n8.5\n8.2\n9.7\n\n\nappealing\n10.8\n7.4\n2.7\n8.4\n8.3\n8.5\n\n\nrewarding\n10.1\n1.1\n0.1\n6.3\n6.0\n10.5\n\n\npopular\n8.9\n3.6\n0.8\n5.2\n5.4\n9.5\n\n\nservice\n13.0\n19.3\n17.9\n16.9\n16.6\n13.6\n\n\nimpact\n13.2\n28.0\n42.8\n21.6\n22.0\n14.0"
+  },
+  {
+    "objectID": "projects/project5/index.html#discussion",
+    "href": "projects/project5/index.html#discussion",
+    "title": "Key Drivers Analysis",
+    "section": "Discussion",
+    "text": "Discussion\nAcross all six methods, impact, trust, and service consistently emerge as the top three drivers of satisfaction, while build, popular, and rewarding tend to rank near the bottom. The raw Pearson correlations are fairly similar across predictors (all roughly 0.17-0.26), which reflects the high multicollinearity among these 10 perception variables. Once that overlap is accounted for — as the usefulness, Shapley, and Johnson’s-epsilon measures do — the differences between predictors become much sharper, with impact and trust together accounting for roughly half of the explained variance. The random forest Gini importances tell a broadly similar story but are more evenly spread across predictors, since tree-based splits can exploit correlated variables interchangeably."
   }
 ]

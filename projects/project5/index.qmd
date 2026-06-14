@@ -1,0 +1,187 @@
+---
+title: "Key Drivers Analysis"
+author: "Your Name"
+date: today
+execute:
+  echo: true
+  warning: false
+---
+
+## Introduction
+
+This analysis replicates the variable importance table from the key drivers
+slides. The outcome variable is overall `satisfaction`, and the predictors
+are 10 binary perception variables (`trust`, `build`, `differs`, `easy`,
+`appealing`, `rewarding`, `popular`, `service`, `impact`).
+
+For each predictor, we compute six measures of importance:
+
+- **Pearson correlation** with the outcome
+- **Standardized regression coefficient** from a linear regression
+- **"Usefulness" (drop-one)**: the drop in R² when the variable is removed
+- **Shapley value** for a linear regression (R² as the fit metric)
+- **Johnson's relative weight**
+- **Random forest mean decrease in Gini (impurity)**
+
+```{python}
+import pandas as pd
+import numpy as np
+from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor
+from itertools import combinations
+import math
+
+df = pd.read_csv("data_for_drivers_analysis.csv")
+y = df["satisfaction"]
+X = df[["trust", "build", "differs", "easy", "appealing",
+        "rewarding", "popular", "service", "impact"]]
+
+predictors = X.columns.tolist()
+k = len(predictors)
+```
+
+## 1. Pearson correlations
+
+```{python}
+pearson = X.apply(lambda col: col.corr(y))
+pearson
+```
+
+## 2. Standardized regression coefficients
+
+```{python}
+Xs = (X - X.mean()) / X.std()
+ys = (y - y.mean()) / y.std()
+
+lr = LinearRegression().fit(Xs, ys)
+std_coef = pd.Series(lr.coef_, index=predictors)
+std_coef
+```
+
+## 3. Drop-one ("usefulness")
+
+The usefulness of a predictor is the decrease in R² when that predictor is
+removed from the full model.
+
+```{python}
+lr_full = LinearRegression().fit(X, y)
+r2_full = lr_full.score(X, y)
+
+usefulness = {}
+for p in predictors:
+    cols = [c for c in predictors if c != p]
+    r2_minus = LinearRegression().fit(X[cols], y).score(X[cols], y)
+    usefulness[p] = r2_full - r2_minus
+
+usefulness = pd.Series(usefulness)
+print(f"Full model R^2 = {r2_full:.4f}")
+usefulness
+```
+
+## 4. Shapley values (linear regression, R² as fit metric)
+
+For each predictor, we average its marginal contribution to R² across all
+possible orderings of the other predictors (the exact Shapley value
+formula).
+
+```{python}
+def r2_for_subset(subset):
+    if len(subset) == 0:
+        return 0.0
+    return LinearRegression().fit(X[list(subset)], y).score(X[list(subset)], y)
+
+shapley = {p: 0.0 for p in predictors}
+for p in predictors:
+    others = [x for x in predictors if x != p]
+    total = 0.0
+    for size in range(0, len(others) + 1):
+        for subset in combinations(others, size):
+            r2_with = r2_for_subset(subset + (p,))
+            r2_without = r2_for_subset(subset)
+            weight = (math.factorial(size) * math.factorial(k - size - 1)) / math.factorial(k)
+            total += weight * (r2_with - r2_without)
+    shapley[p] = total
+
+shapley = pd.Series(shapley)
+print(f"Sum of Shapley values = {shapley.sum():.4f}  (should equal R^2 = {r2_full:.4f})")
+shapley
+```
+
+## 5. Johnson's epsilon (relative weights)
+
+Johnson's relative weights decompose R² using an orthogonal transformation
+of the predictors (via eigen-decomposition of the correlation matrix), so
+that each predictor's "epsilon" weight is non-negative and the weights sum
+to the model's R².
+
+```{python}
+Xs = (X - X.mean()) / X.std()
+ys = (y - y.mean()) / y.std()
+
+corr_X = Xs.corr().values
+eigvals, eigvecs = np.linalg.eigh(corr_X)
+
+# Lambda: square-root factor such that Lambda @ Lambda.T = corr_X
+Lambda = eigvecs @ np.diag(np.sqrt(eigvals)) @ eigvecs.T
+Lambda_inv = np.linalg.inv(Lambda)
+
+# orthogonal predictors: Z = Xs @ Lambda_inv  (so Z'Z/n = I)
+Z = Xs.values @ Lambda_inv
+
+# regression coefficients of ys on the orthogonal variables Z
+beta_s = np.linalg.lstsq(Z, ys.values, rcond=None)[0]
+
+# epsilon weights
+johnson = (Lambda**2) @ (beta_s**2)
+johnson = pd.Series(johnson, index=predictors)
+
+print(f"Sum of Johnson's weights = {johnson.sum():.4f}  (should equal R^2 = {r2_full:.4f})")
+johnson
+```
+
+## 6. Random forest: mean decrease in Gini (impurity)
+
+```{python}
+rf = RandomForestRegressor(n_estimators=500, random_state=42)
+rf.fit(X, y)
+rf_gini = pd.Series(rf.feature_importances_, index=predictors)
+rf_gini
+```
+
+## Summary table
+
+Following the format of slide 75, every column is expressed as each
+predictor's **share of the total (%)**: take the absolute value of each
+measure and divide by the column sum. The "Usefulness" (drop-one) column
+is included as an extra measure per the assignment instructions.
+
+```{python}
+table = pd.DataFrame({
+    "Pearson Correlations": pearson,
+    "Standardized Coefficients": std_coef,
+    "Usefulness": usefulness,
+    "Shapley Values": shapley,
+    "Johnson's Epsilon": johnson,
+    "RF Gini Importance": rf_gini,
+})
+
+table_pct = table.abs()
+table_pct = table_pct / table_pct.sum() * 100
+
+table_pct.round(1)
+```
+
+## Discussion
+
+Across all six methods, **`impact`**, **`trust`**, and **`service`**
+consistently emerge as the top three drivers of satisfaction, while
+**`build`**, **`popular`**, and **`rewarding`** tend to rank near the
+bottom. The raw Pearson correlations are fairly similar across predictors
+(all roughly 0.17-0.26), which reflects the high multicollinearity among
+these 10 perception variables. Once that overlap is accounted for — as the
+usefulness, Shapley, and Johnson's-epsilon measures do — the differences
+between predictors become much sharper, with `impact` and `trust` together
+accounting for roughly half of the explained variance. The random forest
+Gini importances tell a broadly similar story but are more evenly spread
+across predictors, since tree-based splits can exploit correlated variables
+interchangeably.
