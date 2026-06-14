@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Your Name">
+<meta name="author" content="Corrine Chen">
 <meta name="dcterms.date" content="2026-06-13">
 
 <title>Key Drivers Analysis – Corrine Chen</title>
@@ -170,6 +170,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#johnsons-epsilon-relative-weights" id="toc-johnsons-epsilon-relative-weights" class="nav-link" data-scroll-target="#johnsons-epsilon-relative-weights">5. Johnson’s epsilon (relative weights)</a></li>
   <li><a href="#random-forest-mean-decrease-in-gini-impurity" id="toc-random-forest-mean-decrease-in-gini-impurity" class="nav-link" data-scroll-target="#random-forest-mean-decrease-in-gini-impurity">6. Random forest: mean decrease in Gini (impurity)</a></li>
   <li><a href="#summary-table" id="toc-summary-table" class="nav-link" data-scroll-target="#summary-table">Summary table</a></li>
+  <li><a href="#visualization" id="toc-visualization" class="nav-link" data-scroll-target="#visualization">Visualization</a></li>
   <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion">Discussion</a></li>
   </ul>
 </nav>
@@ -189,7 +190,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>Your Name </p>
+             <p>Corrine Chen </p>
           </div>
   </div>
     
@@ -220,7 +221,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Johnson’s relative weight</strong></li>
 <li><strong>Random forest mean decrease in Gini (impurity)</strong></li>
 </ul>
-<div id="3ae337d5" class="cell" data-execution_count="1">
+<div id="d266de37" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
@@ -239,10 +240,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="pearson-correlations" class="level2">
 <h2 class="anchored" data-anchor-id="pearson-correlations">1. Pearson correlations</h2>
-<div id="265284f1" class="cell" data-execution_count="2">
+<div id="789d1ca1" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pearson <span class="op">=</span> X.<span class="bu">apply</span>(<span class="kw">lambda</span> col: col.corr(y))</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>pearson</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="10">
+<div class="cell-output cell-output-display" data-execution_count="43">
 <pre><code>trust        0.255706
 build        0.191896
 differs      0.184801
@@ -258,14 +259,14 @@ dtype: float64</code></pre>
 </section>
 <section id="standardized-regression-coefficients" class="level2">
 <h2 class="anchored" data-anchor-id="standardized-regression-coefficients">2. Standardized regression coefficients</h2>
-<div id="6213ad49" class="cell" data-execution_count="3">
+<div id="0eb2c75d" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Xs <span class="op">=</span> (X <span class="op">-</span> X.mean()) <span class="op">/</span> X.std()</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>ys <span class="op">=</span> (y <span class="op">-</span> y.mean()) <span class="op">/</span> y.std()</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>lr <span class="op">=</span> LinearRegression().fit(Xs, ys)</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>std_coef <span class="op">=</span> pd.Series(lr.coef_, index<span class="op">=</span>predictors)</span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>std_coef</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="11">
+<div class="cell-output cell-output-display" data-execution_count="44">
 <pre><code>trust        0.115752
 build        0.019979
 differs      0.027847
@@ -282,7 +283,7 @@ dtype: float64</code></pre>
 <section id="drop-one-usefulness" class="level2">
 <h2 class="anchored" data-anchor-id="drop-one-usefulness">3. Drop-one (“usefulness”)</h2>
 <p>The usefulness of a predictor is the decrease in R² when that predictor is removed from the full model.</p>
-<div id="df185bca" class="cell" data-execution_count="4">
+<div id="1d81877e" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>lr_full <span class="op">=</span> LinearRegression().fit(X, y)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>r2_full <span class="op">=</span> lr_full.score(X, y)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -298,7 +299,7 @@ dtype: float64</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Full model R^2 = 0.1090</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="12">
+<div class="cell-output cell-output-display" data-execution_count="45">
 <pre><code>trust        0.008243
 build        0.000266
 differs      0.000550
@@ -315,7 +316,7 @@ dtype: float64</code></pre>
 <section id="shapley-values-linear-regression-r²-as-fit-metric" class="level2">
 <h2 class="anchored" data-anchor-id="shapley-values-linear-regression-r²-as-fit-metric">4. Shapley values (linear regression, R² as fit metric)</h2>
 <p>For each predictor, we average its marginal contribution to R² across all possible orderings of the other predictors (the exact Shapley value formula).</p>
-<div id="cfe84ff7" class="cell" data-execution_count="5">
+<div id="a48d7170" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> r2_for_subset(subset):</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(subset) <span class="op">==</span> <span class="dv">0</span>:</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="fl">0.0</span></span>
@@ -339,7 +340,7 @@ dtype: float64</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Sum of Shapley values = 0.1090  (should equal R^2 = 0.1090)</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="13">
+<div class="cell-output cell-output-display" data-execution_count="46">
 <pre><code>trust        0.021611
 build        0.007191
 differs      0.007291
@@ -356,7 +357,7 @@ dtype: float64</code></pre>
 <section id="johnsons-epsilon-relative-weights" class="level2">
 <h2 class="anchored" data-anchor-id="johnsons-epsilon-relative-weights">5. Johnson’s epsilon (relative weights)</h2>
 <p>Johnson’s relative weights decompose R² using an orthogonal transformation of the predictors (via eigen-decomposition of the correlation matrix), so that each predictor’s “epsilon” weight is non-negative and the weights sum to the model’s R².</p>
-<div id="cf41a341" class="cell" data-execution_count="6">
+<div id="afb38084" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>Xs <span class="op">=</span> (X <span class="op">-</span> X.mean()) <span class="op">/</span> X.std()</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>ys <span class="op">=</span> (y <span class="op">-</span> y.mean()) <span class="op">/</span> y.std()</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -382,7 +383,7 @@ dtype: float64</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Sum of Johnson's weights = 0.1090  (should equal R^2 = 0.1090)</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="14">
+<div class="cell-output cell-output-display" data-execution_count="47">
 <pre><code>trust        0.021623
 build        0.007217
 differs      0.007594
@@ -398,12 +399,12 @@ dtype: float64</code></pre>
 </section>
 <section id="random-forest-mean-decrease-in-gini-impurity" class="level2">
 <h2 class="anchored" data-anchor-id="random-forest-mean-decrease-in-gini-impurity">6. Random forest: mean decrease in Gini (impurity)</h2>
-<div id="47dec5c8" class="cell" data-execution_count="7">
+<div id="c3c91193" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>rf <span class="op">=</span> RandomForestRegressor(n_estimators<span class="op">=</span><span class="dv">500</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>rf.fit(X, y)</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>rf_gini <span class="op">=</span> pd.Series(rf.feature_importances_, index<span class="op">=</span>predictors)</span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>rf_gini</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="15">
+<div class="cell-output cell-output-display" data-execution_count="48">
 <pre><code>trust        0.152313
 build        0.099703
 differs      0.089597
@@ -419,8 +420,8 @@ dtype: float64</code></pre>
 </section>
 <section id="summary-table" class="level2">
 <h2 class="anchored" data-anchor-id="summary-table">Summary table</h2>
-<p>Following the format of slide 75, every column is expressed as each predictor’s <strong>share of the total (%)</strong>: take the absolute value of each measure and divide by the column sum. The “Usefulness” (drop-one) column is included as an extra measure per the assignment instructions.</p>
-<div id="c792e74b" class="cell" data-execution_count="8">
+<p>Following the format of slide 75, every column is expressed as each predictor’s <strong>share of the total (%)</strong>: take the absolute value of each measure and divide by the column sum. The “Usefulness” (drop-one) column is included as an extra measure per the assignment instructions. We validated this percentage formula against the slide 75 example (the “Credit Card Example”): applying the same abs-and-normalize transformation to that example’s raw values reproduces its published percentages almost exactly, confirming this is the correct way to convert each raw measure into the table format shown in the slides.</p>
+<div id="d746bdf1" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>table <span class="op">=</span> pd.DataFrame({</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Pearson Correlations"</span>: pearson,</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Standardized Coefficients"</span>: std_coef,</span>
@@ -434,7 +435,7 @@ dtype: float64</code></pre>
 <span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>table_pct <span class="op">=</span> table_pct <span class="op">/</span> table_pct.<span class="bu">sum</span>() <span class="op">*</span> <span class="dv">100</span></span>
 <span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>table_pct.<span class="bu">round</span>(<span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="16">
+<div class="cell-output cell-output-display" data-execution_count="49">
 <div>
 
 
@@ -539,9 +540,31 @@ dtype: float64</code></pre>
 </div>
 </div>
 </section>
+<section id="visualization" class="level2">
+<h2 class="anchored" data-anchor-id="visualization">Visualization</h2>
+<div id="8bb59218" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>table_pct.plot(kind<span class="op">=</span><span class="st">"bar"</span>, ax<span class="op">=</span>ax)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"Share of total (%)"</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Predictor"</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Variable Importance Across Six Methods"</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>ax.legend(loc<span class="op">=</span><span class="st">"upper right"</span>, fontsize<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-10-output-1.png" width="950" height="469" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
 <section id="discussion" class="level2">
 <h2 class="anchored" data-anchor-id="discussion">Discussion</h2>
-<p>Across all six methods, <strong><code>impact</code></strong>, <strong><code>trust</code></strong>, and <strong><code>service</code></strong> consistently emerge as the top three drivers of satisfaction, while <strong><code>build</code></strong>, <strong><code>popular</code></strong>, and <strong><code>rewarding</code></strong> tend to rank near the bottom. The raw Pearson correlations are fairly similar across predictors (all roughly 0.17-0.26), which reflects the high multicollinearity among these 10 perception variables. Once that overlap is accounted for — as the usefulness, Shapley, and Johnson’s-epsilon measures do — the differences between predictors become much sharper, with <code>impact</code> and <code>trust</code> together accounting for roughly half of the explained variance. The random forest Gini importances tell a broadly similar story but are more evenly spread across predictors, since tree-based splits can exploit correlated variables interchangeably.</p>
+<p>Across all six methods, <strong><code>impact</code></strong>, <strong><code>trust</code></strong>, and <strong><code>service</code></strong> consistently emerge as the top three drivers of satisfaction, while <strong><code>build</code></strong>, <strong><code>popular</code></strong>, and <strong><code>rewarding</code></strong> tend to rank near the bottom. The raw Pearson correlations are fairly similar across predictors (all roughly 0.17-0.26), which reflects the high multicollinearity among these 10 perception variables. Note that the Pearson correlation column is conceptually different from the other five: it is simply each predictor’s bivariate correlation with satisfaction (rescaled to a percentage share), and does not account for overlap among predictors. The other five measures are all forms of <strong>variance (R²) decomposition</strong> that attribute shares of the model’s explanatory power while accounting for multicollinearity. Once that overlap is accounted for — as the usefulness, Shapley, and Johnson’s-epsilon measures do — the differences between predictors become much sharper, with <code>impact</code> and <code>trust</code> together accounting for roughly half of the explained variance. The random forest Gini importances tell a broadly similar story but are more evenly spread across predictors, since tree-based splits can exploit correlated variables interchangeably.</p>
 
 
 </section>

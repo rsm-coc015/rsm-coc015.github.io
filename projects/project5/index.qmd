@@ -1,6 +1,6 @@
 ---
 title: "Key Drivers Analysis"
-author: "Your Name"
+author: "Corrine Chen"
 date: today
 execute:
   echo: true
@@ -153,7 +153,12 @@ rf_gini
 Following the format of slide 75, every column is expressed as each
 predictor's **share of the total (%)**: take the absolute value of each
 measure and divide by the column sum. The "Usefulness" (drop-one) column
-is included as an extra measure per the assignment instructions.
+is included as an extra measure per the assignment instructions. We
+validated this percentage formula against the slide 75 example (the
+"Credit Card Example"): applying the same abs-and-normalize transformation
+to that example's raw values reproduces its published percentages almost
+exactly, confirming this is the correct way to convert each raw measure
+into the table format shown in the slides.
 
 ```{python}
 table = pd.DataFrame({
@@ -171,17 +176,36 @@ table_pct = table_pct / table_pct.sum() * 100
 table_pct.round(1)
 ```
 
-## Discussion
+## Visualization
 
+```{python}
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots(figsize=(10, 5))
+table_pct.plot(kind="bar", ax=ax)
+ax.set_ylabel("Share of total (%)")
+ax.set_xlabel("Predictor")
+ax.set_title("Variable Importance Across Six Methods")
+ax.legend(loc="upper right", fontsize=8)
+plt.tight_layout()
+plt.show()
+```
+
+## Discussion
 Across all six methods, **`impact`**, **`trust`**, and **`service`**
 consistently emerge as the top three drivers of satisfaction, while
 **`build`**, **`popular`**, and **`rewarding`** tend to rank near the
 bottom. The raw Pearson correlations are fairly similar across predictors
 (all roughly 0.17-0.26), which reflects the high multicollinearity among
-these 10 perception variables. Once that overlap is accounted for — as the
-usefulness, Shapley, and Johnson's-epsilon measures do — the differences
-between predictors become much sharper, with `impact` and `trust` together
-accounting for roughly half of the explained variance. The random forest
-Gini importances tell a broadly similar story but are more evenly spread
-across predictors, since tree-based splits can exploit correlated variables
-interchangeably.
+these 10 perception variables. Note that the Pearson correlation column is
+conceptually different from the other five: it is simply each predictor's
+bivariate correlation with satisfaction (rescaled to a percentage share),
+and does not account for overlap among predictors. The other five measures
+are all forms of **variance (R²) decomposition** that attribute shares of
+the model's explanatory power while accounting for multicollinearity. Once
+that overlap is accounted for — as the usefulness, Shapley, and
+Johnson's-epsilon measures do — the differences between predictors become
+much sharper, with `impact` and `trust` together accounting for roughly
+half of the explained variance. The random forest Gini importances tell a
+broadly similar story but are more evenly spread across predictors, since
+tree-based splits can exploit correlated variables interchangeably.
